@@ -1,0 +1,1132 @@
+[
+  {
+    "mac": "94c96001b2d1",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b2d3",
+    "dorm": "清華會館",
+    "slug": "tsinghua_hall",
+    "area": "清華會館 9F",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b2d4",
+    "dorm": "清華會館",
+    "slug": "tsinghua_hall",
+    "area": "清華會館 B1",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b2e0",
+    "dorm": "明齋",
+    "slug": "ming",
+    "area": "明齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b2e1",
+    "dorm": "明齋",
+    "slug": "ming",
+    "area": "明齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b306",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b307",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b30c",
+    "dorm": "清華會館",
+    "slug": "tsinghua_hall",
+    "area": "清華會館 9F",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b30e",
+    "dorm": "明齋",
+    "slug": "ming",
+    "area": "明齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b310",
+    "dorm": "清華會館",
+    "slug": "tsinghua_hall",
+    "area": "清華會館 B1",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b311",
+    "dorm": "清華會館",
+    "slug": "tsinghua_hall",
+    "area": "清華會館 9F",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b328",
+    "dorm": "新齋",
+    "slug": "hsin",
+    "area": "新齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b349",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b352",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b354",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 6,
+    "displayName": "洗 6"
+  },
+  {
+    "mac": "94c96001b357",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 4,
+    "displayName": "烘 4"
+  },
+  {
+    "mac": "94c96001b358",
+    "dorm": "新齋",
+    "slug": "hsin",
+    "area": "新齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b359",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b35b",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 3,
+    "displayName": "烘 3"
+  },
+  {
+    "mac": "94c96001b35d",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 5,
+    "displayName": "洗 5"
+  },
+  {
+    "mac": "94c96001b35e",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b35f",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b366",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b367",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b369",
+    "dorm": "新齋",
+    "slug": "hsin",
+    "area": "新齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b371",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 6,
+    "displayName": "洗 6"
+  },
+  {
+    "mac": "94c96001b380",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 5,
+    "displayName": "烘 5"
+  },
+  {
+    "mac": "94c96001b389",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 7,
+    "displayName": "洗 7"
+  },
+  {
+    "mac": "94c96001b38b",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋男",
+    "gender": "男",
+    "type": "烘",
+    "number": 3,
+    "displayName": "烘 3"
+  },
+  {
+    "mac": "94c96001b38f",
+    "dorm": "新齋",
+    "slug": "hsin",
+    "area": "新齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b390",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 5,
+    "displayName": "洗 5"
+  },
+  {
+    "mac": "94c96001b391",
+    "dorm": "新齋",
+    "slug": "hsin",
+    "area": "新齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b392",
+    "dorm": "禮齋",
+    "slug": "li",
+    "area": "禮齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b393",
+    "dorm": "靜齋",
+    "slug": "jing",
+    "area": "靜齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b394",
+    "dorm": "靜齋",
+    "slug": "jing",
+    "area": "靜齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b395",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 3,
+    "displayName": "烘 3"
+  },
+  {
+    "mac": "94c96001b396",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋男",
+    "gender": "男",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b398",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 3,
+    "displayName": "烘 3"
+  },
+  {
+    "mac": "94c96001b399",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b39e",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 4,
+    "displayName": "烘 4"
+  },
+  {
+    "mac": "94c96001b39f",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋男",
+    "gender": "男",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3a1",
+    "dorm": "靜齋",
+    "slug": "jing",
+    "area": "靜齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b3a2",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋女",
+    "gender": "女",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3a3",
+    "dorm": "靜齋",
+    "slug": "jing",
+    "area": "靜齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3a8",
+    "dorm": "慧齋",
+    "slug": "huei",
+    "area": "慧齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b3a9",
+    "dorm": "靜齋",
+    "slug": "jing",
+    "area": "靜齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3aa",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 4,
+    "displayName": "烘 4"
+  },
+  {
+    "mac": "94c96001b3ae",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋女",
+    "gender": "女",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b3af",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3b0",
+    "dorm": "雅齋",
+    "slug": "ya",
+    "area": "雅齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3b8",
+    "dorm": "明齋",
+    "slug": "ming",
+    "area": "明齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 3,
+    "displayName": "烘 3"
+  },
+  {
+    "mac": "94c96001b3b9",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋女",
+    "gender": "女",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3bb",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 3,
+    "displayName": "烘 3"
+  },
+  {
+    "mac": "94c96001b3bc",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3bd",
+    "dorm": "明齋",
+    "slug": "ming",
+    "area": "明齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3bf",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3c0",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b3c1",
+    "dorm": "明齋",
+    "slug": "ming",
+    "area": "明齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b3c2",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋男",
+    "gender": "男",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3c3",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 4,
+    "displayName": "烘 4"
+  },
+  {
+    "mac": "94c96001b3c5",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3c6",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 6,
+    "displayName": "洗 6"
+  },
+  {
+    "mac": "94c96001b3c7",
+    "dorm": "雅齋",
+    "slug": "ya",
+    "area": "雅齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3c8",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b3c9",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋男",
+    "gender": "男",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3ca",
+    "dorm": "雅齋",
+    "slug": "ya",
+    "area": "雅齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 3,
+    "displayName": "烘 3"
+  },
+  {
+    "mac": "94c96001b3cb",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋男",
+    "gender": "男",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3cc",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋男",
+    "gender": "男",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b3cd",
+    "dorm": "雅齋",
+    "slug": "ya",
+    "area": "雅齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 4,
+    "displayName": "烘 4"
+  },
+  {
+    "mac": "94c96001b3ce",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋男",
+    "gender": "男",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b3d0",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3d1",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b3d2",
+    "dorm": "雅齋",
+    "slug": "ya",
+    "area": "雅齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b3d3",
+    "dorm": "雅齋",
+    "slug": "ya",
+    "area": "雅齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b3d4",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 7,
+    "displayName": "洗 7"
+  },
+  {
+    "mac": "94c96001b3d5",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 3,
+    "displayName": "烘 3"
+  },
+  {
+    "mac": "94c96001b3d6",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 4,
+    "displayName": "烘 4"
+  },
+  {
+    "mac": "94c96001b3d7",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 5,
+    "displayName": "洗 5"
+  },
+  {
+    "mac": "94c96001b3d8",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 5,
+    "displayName": "洗 5"
+  },
+  {
+    "mac": "94c96001b3d9",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b3da",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b3dc",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 6,
+    "displayName": "洗 6"
+  },
+  {
+    "mac": "94c96001b3dd",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b3df",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3e0",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 8,
+    "displayName": "洗 8"
+  },
+  {
+    "mac": "94c96001b3e1",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋女",
+    "gender": "女",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3e2",
+    "dorm": "義齋",
+    "slug": "yi",
+    "area": "義齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b3e3",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋男",
+    "gender": "男",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b3e4",
+    "dorm": "華齋",
+    "slug": "hua",
+    "area": "華齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 5,
+    "displayName": "烘 5"
+  },
+  {
+    "mac": "94c96001b3e6",
+    "dorm": "慧齋",
+    "slug": "huei",
+    "area": "慧齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b3e7",
+    "dorm": "慧齋",
+    "slug": "huei",
+    "area": "慧齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3e8",
+    "dorm": "靜齋",
+    "slug": "jing",
+    "area": "靜齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b3e9",
+    "dorm": "雅齋",
+    "slug": "ya",
+    "area": "雅齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b3ea",
+    "dorm": "慧齋",
+    "slug": "huei",
+    "area": "慧齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3eb",
+    "dorm": "雅齋",
+    "slug": "ya",
+    "area": "雅齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3ec",
+    "dorm": "慧齋",
+    "slug": "huei",
+    "area": "慧齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3ed",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋女",
+    "gender": "女",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3ee",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3ef",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3f0",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋女",
+    "gender": "女",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b3f1",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋女",
+    "gender": "女",
+    "type": "烘",
+    "number": 1,
+    "displayName": "烘 1"
+  },
+  {
+    "mac": "94c96001b3f2",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋女",
+    "gender": "女",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3f3",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋女",
+    "gender": "女",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  },
+  {
+    "mac": "94c96001b3f4",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋男",
+    "gender": "男",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3f5",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋男",
+    "gender": "男",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b3f6",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋男",
+    "gender": "男",
+    "type": "洗",
+    "number": 3,
+    "displayName": "洗 3"
+  },
+  {
+    "mac": "94c96001b3fc",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b3fd",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 5,
+    "displayName": "洗 5"
+  },
+  {
+    "mac": "94c96001b3fe",
+    "dorm": "誠齋",
+    "slug": "cheng",
+    "area": "誠齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 2,
+    "displayName": "洗 2"
+  },
+  {
+    "mac": "94c96001b3ff",
+    "dorm": "碩齋",
+    "slug": "shuo",
+    "area": "碩齋",
+    "gender": "通用",
+    "type": "洗",
+    "number": 4,
+    "displayName": "洗 4"
+  },
+  {
+    "mac": "94c96001b400",
+    "dorm": "仁齋",
+    "slug": "jen",
+    "area": "仁齋男",
+    "gender": "男",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b43d",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋女",
+    "gender": "女",
+    "type": "烘",
+    "number": 2,
+    "displayName": "烘 2"
+  },
+  {
+    "mac": "94c96001b43e",
+    "dorm": "實齋",
+    "slug": "shyr",
+    "area": "實齋女",
+    "gender": "女",
+    "type": "洗",
+    "number": 1,
+    "displayName": "洗 1"
+  }
+]

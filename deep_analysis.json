@@ -1,0 +1,152 @@
+{
+  "api_tags": {
+    "Announcements": [
+      "GET /announcements/",
+      "GET /announcements/sources",
+      "GET /announcements/lists/departments"
+    ],
+    "Buses": [
+      "GET /buses/routes",
+      "GET /buses/info/stops",
+      "GET /buses/schedules",
+      "GET /buses/stops/{stop_name}"
+    ],
+    "Courses": [
+      "GET /courses/",
+      "GET /courses/search",
+      "POST /courses/search",
+      "GET /courses/lists/{list_name}"
+    ],
+    "Departments": [
+      "GET /departments/",
+      "GET /departments/search"
+    ],
+    "Dining": [
+      "GET /dining/",
+      "GET /dining/open"
+    ],
+    "Energy": [
+      "GET /energy/electricity_usage"
+    ],
+    "Libraries": [
+      "GET /libraries/space",
+      "GET /libraries/lost_and_found",
+      "GET /libraries/rss/{rss_type}"
+    ],
+    "Locations": [
+      "GET /locations/",
+      "GET /locations/search"
+    ],
+    "Newsletters": [
+      "GET /newsletters/",
+      "GET /newsletters/{newsletter_name}"
+    ]
+  },
+  "root_files": [
+    "announcements.json",
+    "announcements_list.json",
+    "buses.json",
+    "courses.json",
+    "dining.json",
+    "directory.json",
+    "maps.json",
+    "newsletters.json"
+  ],
+  "root_file_schemas": {
+    "announcements.json": {
+      "type": "Array[334]",
+      "sample_keys": [
+        "title",
+        "link",
+        "language",
+        "department",
+        "articles"
+      ]
+    },
+    "announcements_list.json": {
+      "type": "Array[340]",
+      "sample_keys": [
+        "title",
+        "link",
+        "language",
+        "department"
+      ]
+    },
+    "buses.json": {
+      "type": "Dict[14 keys]",
+      "sample_keys": [
+        "towardTSMCBuildingInfo",
+        "towardMainGateInfo",
+        "weekdayBusScheduleTowardTSMCBuilding",
+        "weekendBusScheduleTowardTSMCBuilding",
+        "weekdayBusScheduleTowardMainGate",
+        "weekendBusScheduleTowardMainGate",
+        "towardNandaInfo",
+        "towardMainCampusInfo",
+        "weekdayBusScheduleTowardNanda",
+        "weekendBusScheduleTowardNanda"
+      ]
+    },
+    "courses.json": {
+      "type": "Array[3154]",
+      "sample_keys": [
+        "科號",
+        "課程中文名稱",
+        "課程英文名稱",
+        "學分數",
+        "人限",
+        "新生保留人數",
+        "通識對象",
+        "通識類別",
+        "授課語言",
+        "備註",
+        "停開註記",
+        "教室與上課時間",
+        "授課教師",
+        "擋修說明",
+        "課程限制說明",
+        "第一二專長對應",
+        "學分學程對應",
+        "不可加簽說明",
+        "必選修說明"
+      ]
+    },
+    "dining.json": {
+      "type": "Array[5]",
+      "sample_keys": [
+        "building",
+        "restaurants"
+      ]
+    },
+    "directory.json": {
+      "type": "Array[311]",
+      "sample_keys": [
+        "index",
+        "name",
+        "parent_name",
+        "url",
+        "details"
+      ]
+    },
+    "maps.json": {
+      "type": "Dict[4 keys]",
+      "sample_keys": [
+        "MainEN",
+        "MainZH",
+        "NandaEN",
+        "NandaZH"
+      ]
+    },
+    "newsletters.json": {
+      "type": "Array[40]",
+      "sample_keys": [
+        "name",
+        "link",
+        "details",
+        "articles"
+      ]
+    }
+  },
+  "announcements_file_count": 336,
+  "total_files": 396
+}

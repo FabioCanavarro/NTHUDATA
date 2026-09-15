@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Default Theme: Cyber Violet */
+  --color-bg: #0b0f19;
+  --color-card: #131b2e;
+  --color-card-hover: #1b2640;
+  --color-border: #233152;
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+  --color-primary-glow: rgba(139, 92, 246, 0.4);
+  --color-accent: #06b6d4;
+  --color-accent-glow: rgba(6, 182, 212, 0.4);
+  --color-text: #f8fafc;
+  --color-muted: #94a3b8;
+}
+
+[data-theme="emerald"] {
+  --color-bg: #061412;
+  --color-card: #0c2420;
+  --color-card-hover: #12332d;
+  --color-border: #1a473f;
+  --color-primary: #10b981;
+  --color-primary-hover: #059669;
+  --color-primary-glow: rgba(16, 185, 129, 0.4);
+  --color-accent: #3b82f6;
+  --color-accent-glow: rgba(59, 130, 246, 0.4);
+  --color-text: #ecfdf5;
+  --color-muted: #6ee7b7;
+}
+
+[data-theme="amber"] {
+  --color-bg: #140d07;
+  --color-card: #24170d;
+  --color-card-hover: #332213;
+  --color-border: #47301c;
+  --color-primary: #f59e0b;
+  --color-primary-hover: #d97706;
+  --color-primary-glow: rgba(245, 158, 11, 0.4);
+  --color-accent: #ef4444;
+  --color-accent-glow: rgba(239, 68, 68, 0.4);
+  --color-text: #fffbeb;
+  --color-muted: #fcd34d;
+}
+
+[data-theme="cyan"] {
+  --color-bg: #071318;
+  --color-card: #0e2129;
+  --color-card-hover: #14303c;
+  --color-border: #1d4354;
+  --color-primary: #06b6d4;
+  --color-primary-hover: #0891b2;
+  --color-primary-glow: rgba(6, 182, 212, 0.4);
+  --color-accent: #a855f7;
+  --color-accent-glow: rgba(168, 85, 247, 0.4);
+  --color-text: #ecfeff;
+  --color-muted: #67e8f9;
+}
+
+[data-theme="rose"] {
+  --color-bg: #170a10;
+  --color-card: #29121c;
+  --color-card-hover: #3b1a29;
+  --color-border: #522439;
+  --color-primary: #f43f5e;
+  --color-primary-hover: #e11d48;
+  --color-primary-glow: rgba(244, 63, 94, 0.4);
+  --color-accent: #fbbf24;
+  --color-accent-glow: rgba(251, 191, 36, 0.4);
+  --color-text: #fff1f2;
+  --color-muted: #fda4af;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(12px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--color-primary-glow);
+}
