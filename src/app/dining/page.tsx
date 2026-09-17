@@ -162,6 +162,8 @@ export default function DiningPage() {
       }
     }
     loadDiningData();
+    const interval = setInterval(loadDiningData, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const buildings = Array.from(new Set(diningData.map((b) => b.building)));

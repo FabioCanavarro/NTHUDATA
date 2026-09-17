@@ -41,6 +41,8 @@ export default function LostAndFoundPage() {
 
   useEffect(() => {
     fetchLostItems();
+    const interval = setInterval(fetchLostItems, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const categories = ['ALL', 'Electronics', 'ID Cards & Cards', 'Keys & Wallets', 'Stationery & Books', 'Personal Items'];

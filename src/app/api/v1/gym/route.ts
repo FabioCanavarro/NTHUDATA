@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { getPinyinAndEnglish } from '@/utils/pinyin';
 
 export interface SportsVenue {
   id: string;
@@ -18,8 +17,29 @@ export interface SportsVenue {
   bookingInfo: string;
 }
 
+function calculateVenueStatus(hoursStr: string): { status: 'OPEN' | 'CLOSING_SOON' | 'CLOSED'; isOpen: boolean } {
+  // Get current Taipei Time (UTC+8)
+  const now = new Date();
+  const taipeiHours = (now.getUTCHours() + 8) % 24;
+  const taipeiMinutes = now.getUTCMinutes();
+  const currentMinutes = taipeiHours * 60 + taipeiMinutes;
+
+  const match = hoursStr.match(/(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})/);
+  if (!match) return { status: 'OPEN', isOpen: true };
+
+  const openMinutes = parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
+  const closeMinutes = parseInt(match[3], 10) * 60 + parseInt(match[4], 10);
+
+  if (currentMinutes < openMinutes || currentMinutes >= closeMinutes) {
+    return { status: 'CLOSED', isOpen: false };
+  } else if (closeMinutes - currentMinutes <= 30) {
+    return { status: 'CLOSING_SOON', isOpen: true };
+  }
+  return { status: 'OPEN', isOpen: true };
+}
+
 export async function GET() {
-  const venues: SportsVenue[] = [
+  const baseVenues: Omit<SportsVenue, 'status'>[] = [
     {
       id: 'gym-weight-room',
       name: '體育館重訓室',
@@ -28,7 +48,6 @@ export async function GET() {
       category: 'Gym & Fitness',
       location: '校本部體育館 1F (Main Gymnasium 1F)',
       hours: '08:00 - 22:00',
-      status: 'OPEN',
       currentOccupancy: 38,
       maxCapacity: 80,
       feeInfo: 'TWD $20 / entry or Semester Gym Pass',
@@ -42,7 +61,6 @@ export async function GET() {
       category: 'Aquatic Pool',
       location: '水木生活中心旁 (Next to Waterwood Center)',
       hours: '06:00 - 21:30',
-      status: 'OPEN',
       currentOccupancy: 45,
       maxCapacity: 120,
       feeInfo: 'Student ticket TWD $50 / entry',
@@ -56,7 +74,6 @@ export async function GET() {
       category: 'Racket Sports',
       location: '校本部體育館 2F (Main Gymnasium 2F)',
       hours: '08:00 - 22:00',
-      status: 'OPEN',
       totalCourts: 8,
       freeCourts: 3,
       feeInfo: 'Free for NTHU students during open hours',
@@ -70,7 +87,6 @@ export async function GET() {
       category: 'Racket Sports',
       location: '體育館 B1 (Gymnasium B1)',
       hours: '08:00 - 22:00',
-      status: 'OPEN',
       totalCourts: 12,
       freeCourts: 5,
       feeInfo: 'Free for NTHU students',
@@ -84,7 +100,6 @@ export async function GET() {
       category: 'Outdoor Courts',
       location: '操場旁 (Next to Main Track Field)',
       hours: '07:00 - 21:00',
-      status: 'OPEN',
       totalCourts: 6,
       freeCourts: 2,
       feeInfo: 'Night lighting TWD $50/hr per court',
@@ -98,7 +113,6 @@ export async function GET() {
       category: 'Outdoor Courts',
       location: '體育館前方 (Front of Main Gym)',
       hours: '08:00 - 22:00',
-      status: 'OPEN',
       totalCourts: 4,
       freeCourts: 1,
       feeInfo: 'Free open access',
@@ -112,7 +126,6 @@ export async function GET() {
       category: 'Outdoor Courts',
       location: '操場東側 (East Side of Main Track)',
       hours: '08:00 - 22:00',
-      status: 'OPEN',
       totalCourts: 4,
       freeCourts: 2,
       feeInfo: 'Free open access',
@@ -126,13 +139,24 @@ export async function GET() {
       category: 'Gym & Fitness',
       location: '南大校區體育館 (Nanda Campus Gym)',
       hours: '08:30 - 21:30',
-      status: 'OPEN',
       currentOccupancy: 19,
       maxCapacity: 60,
       feeInfo: 'TWD $20 / entry',
       bookingInfo: 'Nanda student card entry.',
     },
   ];
+
+  const venues: SportsVenue[] = baseVenues.map((v) => {
+    const { status, isOpen } = calculateVenueStatus(v.hours);
+
+    return {
+      ...v,
+      status,
+      // If the venue is closed (e.g. after 22:00 / at 23:00), zero out occupancy & free courts
+      currentOccupancy: isOpen ? v.currentOccupancy : 0,
+      freeCourts: isOpen ? v.freeCourts : 0,
+    };
+  });
 
   return NextResponse.json({
     success: true,

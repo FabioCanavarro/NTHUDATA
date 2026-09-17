@@ -51,7 +51,7 @@ export default function YouBikePage() {
 
   useEffect(() => {
     fetchYouBikeData();
-    const interval = setInterval(fetchYouBikeData, 30000);
+    const interval = setInterval(fetchYouBikeData, 3000);
     return () => clearInterval(interval);
   }, []);
 

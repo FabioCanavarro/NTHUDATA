@@ -44,8 +44,11 @@ export default function GymPage() {
     }
   };
 
+  // 3-second auto refresh interval
   useEffect(() => {
     fetchGymData();
+    const interval = setInterval(fetchGymData, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const categories = ['ALL', 'Gym & Fitness', 'Aquatic Pool', 'Racket Sports', 'Outdoor Courts'];
@@ -139,8 +142,9 @@ export default function GymPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((v) => {
+            const isClosed = v.status === 'CLOSED';
             const isHeadcount = v.currentOccupancy !== undefined && v.maxCapacity !== undefined;
-            const pct = isHeadcount ? Math.round((v.currentOccupancy! / v.maxCapacity!) * 100) : 0;
+            const pct = isHeadcount ? (isClosed ? 0 : Math.round((v.currentOccupancy! / v.maxCapacity!) * 100)) : 0;
 
             return (
               <motion.div
@@ -153,9 +157,16 @@ export default function GymPage() {
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
-                      <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 inline-block">
-                        {v.category}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 inline-block">
+                          {v.category}
+                        </span>
+                        {isClosed && (
+                          <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                            CLOSED (已閉館)
+                          </span>
+                        )}
+                      </div>
                       <h3 className="text-lg font-bold text-theme-text group-hover:text-amber-400 transition-colors pt-1">
                         {v.name}
                       </h3>
@@ -180,45 +191,45 @@ export default function GymPage() {
                         <span className="text-theme-muted flex items-center gap-1 font-medium">
                           <Users className="w-3.5 h-3.5 text-amber-400" /> Live Headcount
                         </span>
-                        <span className="font-extrabold text-amber-400">
-                          {v.currentOccupancy} / {v.maxCapacity} occupied ({pct}%)
+                        <span className={`font-extrabold ${isClosed ? 'text-rose-400' : 'text-amber-400'}`}>
+                          {isClosed ? `0 / ${v.maxCapacity} occupied (Closed 已閉館)` : `${v.currentOccupancy} / ${v.maxCapacity} occupied (${pct}%)`}
                         </span>
                       </div>
                       <div className="w-full bg-theme-bg rounded-full h-3 overflow-hidden border border-theme-border">
                         <div
                           className={`h-full transition-all duration-500 rounded-full ${
-                            pct > 80 ? 'bg-rose-400' : pct > 50 ? 'bg-amber-400' : 'bg-emerald-400'
+                            isClosed ? 'bg-gray-600/40' : pct > 80 ? 'bg-rose-400' : pct > 50 ? 'bg-amber-400' : 'bg-emerald-400'
                           }`}
-                          style={{ width: `${pct}%` }}
+                          style={{ width: `${isClosed ? 0 : pct}%` }}
                         />
                       </div>
                     </div>
                   ) : v.totalCourts !== undefined ? (
                     <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between text-xs">
                       <span className="text-theme-muted font-medium">Available Courts</span>
-                      <span className="font-extrabold text-amber-400 text-sm">
-                        {v.freeCourts} of {v.totalCourts} Courts Free
+                      <span className={`font-extrabold text-sm ${isClosed ? 'text-rose-400' : 'text-amber-400'}`}>
+                        {isClosed ? `Closed (已閉館)` : `${v.freeCourts} of ${v.totalCourts} Courts Free`}
                       </span>
                     </div>
                   ) : null}
 
-                  {/* Hours & Location */}
-                  <div className="space-y-1 text-xs text-theme-muted pt-1">
-                    <p className="flex items-center gap-1.5 font-medium">
+                  {/* Details */}
+                  <div className="space-y-1.5 text-xs text-theme-muted pt-1 border-t border-theme-border/50">
+                    <div className="flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                       <span>Hours: {v.hours}</span>
-                    </p>
-                    <p className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                      <span>{v.location}</span>
-                    </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span className="truncate">{v.location}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Entry Fee & Booking Rules Footer */}
-                <div className="pt-3 border-t border-theme-border/50 space-y-1 text-[11px] text-theme-muted">
-                  <p className="font-semibold text-emerald-400">💵 {v.feeInfo}</p>
-                  <p className="truncate">ℹ️ {v.bookingInfo}</p>
+                {/* Footer Notes */}
+                <div className="p-3 rounded-2xl bg-theme-bg/60 border border-theme-border text-[11px] space-y-1">
+                  <p className="text-amber-400/90 font-medium">💳 {v.feeInfo}</p>
+                  <p className="text-theme-muted">ℹ️ {v.bookingInfo}</p>
                 </div>
               </motion.div>
             );
@@ -226,67 +237,68 @@ export default function GymPage() {
         </div>
       )}
 
-      {/* Entry Guide Modal */}
+      {/* PE Guide Modal */}
       <AnimatePresence>
         {showGuideModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="w-full max-w-2xl bg-theme-card border border-theme-border rounded-3xl shadow-2xl overflow-hidden space-y-4"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-xl bg-theme-card border border-theme-border rounded-3xl p-6 shadow-2xl space-y-4"
             >
-              <div className="p-5 border-b border-theme-border flex items-center justify-between bg-theme-bg/40">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+              <div className="flex items-center justify-between border-b border-theme-border pb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
                     <Dumbbell className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-extrabold text-theme-text">
-                      Gym & Sports Facility Entry Rules
-                    </h3>
-                    <p className="text-xs text-amber-400 font-semibold">
-                      Qīnghuá Dàxué Tǐyùguǎn Rùchǎng Xūzhī • Access Guide
-                    </p>
+                    <h3 className="text-lg font-bold text-theme-text">NTHU PE Facilities Guide (入場須知)</h3>
+                    <p className="text-xs text-theme-muted">Physical Education & Sports Facilities Policy</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowGuideModal(false)}
-                  className="p-2 rounded-xl bg-theme-card hover:bg-theme-card-hover border border-theme-border text-theme-muted hover:text-theme-text transition-colors"
+                  className="p-2 rounded-xl hover:bg-theme-bg border border-theme-border text-theme-muted hover:text-theme-text"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto text-xs text-theme-text">
-                <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-1">
-                  <span className="font-bold text-amber-400 text-sm">Weight Room (重訓室)</span>
+              <div className="space-y-3 text-xs text-theme-text max-h-[60vh] overflow-y-auto pr-1">
+                <div className="p-3 rounded-2xl bg-theme-bg border border-theme-border space-y-1">
+                  <p className="font-bold text-amber-400">🏋️ Gym & Weight Room (體育館重訓室)</p>
                   <p className="text-theme-muted">
-                    Scan your NTHU Student ID or Faculty Employee Card at the entry turnstile. Single entry TWD $20 or purchase an unlimited semester gym pass at the PE office.
+                    - Entry Fee: TWD $20 per entry or Semester Gym Pass.<br />
+                    - Scan valid NTHU Student ID or Faculty Card at turnstile.<br />
+                    - Proper athletic shoes and workout clothes required. Towel is mandatory.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-1">
-                  <span className="font-bold text-amber-400 text-sm">Swimming Pool (游泳館)</span>
+                <div className="p-3 rounded-2xl bg-theme-bg border border-theme-border space-y-1">
+                  <p className="font-bold text-amber-400">🏊 Aquatic Center (水木游泳池)</p>
                   <p className="text-theme-muted">
-                    Proper swimwear and swim caps are strictly required. Student single entry ticket is TWD $50.
+                    - Student Ticket: TWD $50 / entry.<br />
+                    - Swim cap and proper swimming attire strictly mandatory.<br />
+                    - Lockers available on 1F (TWD $10 coin return).
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-1">
-                  <span className="font-bold text-amber-400 text-sm">Badminton & Table Tennis Courts (羽球與桌球場)</span>
+                <div className="p-3 rounded-2xl bg-theme-bg border border-theme-border space-y-1">
+                  <p className="font-bold text-amber-400">🏸 Indoor Racket Sports (羽球館 & 桌球室)</p>
                   <p className="text-theme-muted">
-                    Must wear non-marking indoor sports shoes. Rackets and balls can be rented at the Gymnasium B1 PE Office.
+                    - Non-marking indoor court shoes required.<br />
+                    - Free for NTHU students during standard open hours.
                   </p>
                 </div>
               </div>
 
-              <div className="p-4 border-t border-theme-border bg-theme-bg/40 flex justify-end">
+              <div className="pt-2 flex justify-end">
                 <button
                   onClick={() => setShowGuideModal(false)}
-                  className="px-4 py-2 rounded-xl bg-amber-500 text-white text-xs font-bold hover:bg-amber-600 transition-all"
+                  className="px-4 py-2 rounded-xl bg-amber-500 text-black text-xs font-bold hover:brightness-110 transition-all"
                 >
-                  Got It
+                  Got It (了解)
                 </button>
               </div>
             </motion.div>
