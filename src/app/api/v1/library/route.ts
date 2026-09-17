@@ -1,7 +1,24 @@
 import { NextResponse } from 'next/server';
 
+function checkLibraryHours(): { mainOpen: boolean; hssOpen: boolean; nandaOpen: boolean } {
+  const now = new Date();
+  const taipeiHours = (now.getUTCHours() + 8) % 24;
+  const taipeiMinutes = now.getUTCMinutes();
+  const currentMinutes = taipeiHours * 60 + taipeiMinutes;
+
+  // Main Library: 08:00 - 22:00 (480 - 1320 mins)
+  const mainOpen = currentMinutes >= 480 && currentMinutes < 1320;
+  // HSS & Nanda: 08:30 - 21:30 (510 - 1290 mins)
+  const hssOpen = currentMinutes >= 510 && currentMinutes < 1290;
+  const nandaOpen = currentMinutes >= 510 && currentMinutes < 1290;
+
+  return { mainOpen, hssOpen, nandaOpen };
+}
+
 export async function GET() {
   try {
+    const { mainOpen, hssOpen, nandaOpen } = checkLibraryHours();
+
     const spaceRes = await fetch('https://libsms.lib.nthu.edu.tw/RWDAPI_New/GetDevUseStatus.aspx', {
       headers: { 'User-Agent': 'Mozilla/5.0' },
       next: { revalidate: 3 },
@@ -28,6 +45,13 @@ export async function GET() {
           else if (zone.includes('人社')) floor = 'HSS Branch (人社分館)';
           else if (zone.includes('科管院')) floor = 'CTM Building (科管院)';
 
+          // Determine if zone is open right now (Moonlight is 24H)
+          let zoneOpen = true;
+          if (!isMoonlight) {
+            if (floor.includes('人社') || floor.includes('科管院')) zoneOpen = hssOpen;
+            else zoneOpen = mainOpen;
+          }
+
           // Estimated total capacity
           let capacity = 30;
           if (typeName.includes('夜讀區')) capacity = 45;
@@ -43,15 +67,20 @@ export async function GET() {
             formattedName = `${zone} - Moonlight Reading Zone ${letter} (夜讀區${letter})`;
           }
 
+          const activeFreeSeats = zoneOpen ? free : 0;
+
           return {
             areaName: formattedName,
             spaceType: isMoonlight ? 'Moonlight Reading Area (夜讀區)' : typeName,
             floor,
             rawZoneName: zone,
             isMoonlightArea: isMoonlight,
-            freeSeats: free,
+            isClosed: !zoneOpen,
+            freeSeats: activeFreeSeats,
             totalSeats: Math.max(free, capacity),
-            occupancyRate: Math.min(100, Math.round(((capacity - free) / capacity) * 100)) + '%',
+            occupancyRate: zoneOpen
+              ? Math.min(100, Math.round(((capacity - free) / capacity) * 100)) + '%'
+              : '0%',
           };
         });
       }
@@ -60,15 +89,15 @@ export async function GET() {
     if (spaceData.length === 0) {
       // High-quality fallback if API revalidates
       spaceData = [
-        { areaName: '4F-夜讀區A - Moonlight Reading Zone A', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, freeSeats: 31, totalSeats: 45, occupancyRate: '31%' },
-        { areaName: '4F-夜讀區B - Moonlight Reading Zone B', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, freeSeats: 16, totalSeats: 45, occupancyRate: '64%' },
-        { areaName: '4F-夜讀區C - Moonlight Reading Zone C', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, freeSeats: 32, totalSeats: 45, occupancyRate: '28%' },
-        { areaName: '4F-夜讀區D - Moonlight Reading Zone D', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, freeSeats: 34, totalSeats: 45, occupancyRate: '24%' },
-        { areaName: '4F-夜讀區E - Moonlight Reading Zone E', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, freeSeats: 41, totalSeats: 45, occupancyRate: '9%' },
-        { areaName: '2F-電腦共學區 (Computer Commons)', spaceType: '電腦共學區', floor: 'Main Lib 2F', isMoonlightArea: false, freeSeats: 45, totalSeats: 60, occupancyRate: '25%' },
-        { areaName: '2F-討論室 (Group Discussion Rooms)', spaceType: '討論室', floor: 'Main Lib 2F', isMoonlightArea: false, freeSeats: 5, totalSeats: 8, occupancyRate: '37.5%' },
-        { areaName: '3F-單人聆賞席 (AV Listening Seats)', spaceType: '聆賞席', floor: 'Main Lib 3F', isMoonlightArea: false, freeSeats: 45, totalSeats: 50, occupancyRate: '10%' },
-        { areaName: '人社2F-資訊島 (HSS PC Island)', spaceType: '資訊島', floor: 'HSS Branch (人社分館)', isMoonlightArea: false, freeSeats: 15, totalSeats: 25, occupancyRate: '40%' },
+        { areaName: '4F-夜讀區A - Moonlight Reading Zone A', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, isClosed: false, freeSeats: 31, totalSeats: 45, occupancyRate: '31%' },
+        { areaName: '4F-夜讀區B - Moonlight Reading Zone B', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, isClosed: false, freeSeats: 16, totalSeats: 45, occupancyRate: '64%' },
+        { areaName: '4F-夜讀區C - Moonlight Reading Zone C', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, isClosed: false, freeSeats: 32, totalSeats: 45, occupancyRate: '28%' },
+        { areaName: '4F-夜讀區D - Moonlight Reading Zone D', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, isClosed: false, freeSeats: 34, totalSeats: 45, occupancyRate: '24%' },
+        { areaName: '4F-夜讀區E - Moonlight Reading Zone E', spaceType: 'Moonlight Reading Area (夜讀區)', floor: 'Moonlight Area (夜讀區)', isMoonlightArea: true, isClosed: false, freeSeats: 41, totalSeats: 45, occupancyRate: '9%' },
+        { areaName: '2F-電腦共學區 (Computer Commons)', spaceType: '電腦共學區', floor: 'Main Lib 2F', isMoonlightArea: false, isClosed: !mainOpen, freeSeats: mainOpen ? 45 : 0, totalSeats: 60, occupancyRate: mainOpen ? '25%' : '0%' },
+        { areaName: '2F-討論室 (Group Discussion Rooms)', spaceType: '討論室', floor: 'Main Lib 2F', isMoonlightArea: false, isClosed: !mainOpen, freeSeats: mainOpen ? 5 : 0, totalSeats: 8, occupancyRate: mainOpen ? '37.5%' : '0%' },
+        { areaName: '3F-單人聆賞席 (AV Listening Seats)', spaceType: '聆賞席', floor: 'Main Lib 3F', isMoonlightArea: false, isClosed: !mainOpen, freeSeats: mainOpen ? 45 : 0, totalSeats: 50, occupancyRate: mainOpen ? '10%' : '0%' },
+        { areaName: '人社2F-資訊島 (HSS PC Island)', spaceType: '資訊島', floor: 'HSS Branch (人社分館)', isMoonlightArea: false, isClosed: !hssOpen, freeSeats: hssOpen ? 15 : 0, totalSeats: 25, occupancyRate: hssOpen ? '40%' : '0%' },
       ];
     }
 
@@ -76,10 +105,10 @@ export async function GET() {
       success: true,
       timestamp: new Date().toISOString(),
       libraries: [
-        { name: '清華大學總圖書館 (Main Library)', status: 'Open', hours: '08:00 - 22:00' },
+        { name: '清華大學總圖書館 (Main Library)', status: mainOpen ? 'Open' : 'Closed', hours: '08:00 - 22:00' },
         { name: '夜讀區 (Moonlight Reading Area 24H)', status: 'Open 24/7', hours: '24 Hours' },
-        { name: '人文社會圖書館 (HSS Branch)', status: 'Open', hours: '08:30 - 21:30' },
-        { name: '南大圖書館 (Nanda Branch)', status: 'Open', hours: '08:30 - 21:30' },
+        { name: '人文社會圖書館 (HSS Branch)', status: hssOpen ? 'Open' : 'Closed', hours: '08:30 - 21:30' },
+        { name: '南大圖書館 (Nanda Branch)', status: nandaOpen ? 'Open' : 'Closed', hours: '08:30 - 21:30' },
       ],
       spaceAvailability: spaceData,
       rssFeeds: [

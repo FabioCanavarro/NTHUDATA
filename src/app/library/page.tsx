@@ -285,10 +285,12 @@ export default function LibraryPage() {
                                       className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
                                         isMoonlight
                                           ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                                          : space.isClosed
+                                          ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
                                           : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
                                       }`}
                                     >
-                                      {isMoonlight ? '🌙 24H Moonlight Area (夜讀區)' : floorName}
+                                      {isMoonlight ? '🌙 24H Moonlight Area (夜讀區)' : space.isClosed ? `${floorName} • CLOSED` : floorName}
                                     </span>
                                   </div>
                                   <h4 className="text-base font-bold text-theme-text">
@@ -299,10 +301,12 @@ export default function LibraryPage() {
                                   className={`text-xs font-extrabold shrink-0 px-2.5 py-1 rounded-full border ${
                                     isMoonlight
                                       ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                                      : space.isClosed
+                                      ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
                                       : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
                                   }`}
                                 >
-                                  {free} free seats
+                                  {space.isClosed ? '0 free (Closed 已閉館)' : `${free} free seats`}
                                 </span>
                               </div>
 
@@ -322,7 +326,9 @@ export default function LibraryPage() {
                               <div className="w-full bg-theme-bg rounded-full h-3 overflow-hidden border border-theme-border">
                                 <div
                                   className={`h-full transition-all duration-500 rounded-full ${
-                                    isMoonlight
+                                    space.isClosed
+                                      ? 'bg-gray-600/40'
+                                      : isMoonlight
                                       ? 'bg-purple-400'
                                       : pct > 80
                                       ? 'bg-rose-400'
@@ -330,11 +336,11 @@ export default function LibraryPage() {
                                       ? 'bg-amber-400'
                                       : 'bg-emerald-400'
                                   }`}
-                                  style={{ width: `${pct}%` }}
+                                  style={{ width: `${space.isClosed ? 0 : pct}%` }}
                                 />
                               </div>
                               <div className="flex items-center justify-between text-[11px] text-theme-muted font-medium">
-                                <span>{pct}% Occupied (已使用)</span>
+                                <span>{space.isClosed ? 'Closed (已閉館)' : `${pct}% Occupied (已使用)`}</span>
                                 <span>Capacity: {total} Seats</span>
                               </div>
                             </div>
