@@ -13,6 +13,8 @@ export default function LibraryPage() {
   const [selectedFloor, setSelectedFloor] = useState<string>('ALL');
   const [selectedType, setSelectedType] = useState<string>('ALL');
   const [showGuideModal, setShowGuideModal] = useState(false);
+  const [selectedSpace, setSelectedSpace] = useState<any>(null);
+  const [selectedLibModal, setSelectedLibModal] = useState<any>(null);
 
   const loadLibraryData = async () => {
     try {
@@ -83,6 +85,59 @@ export default function LibraryPage() {
     groupedByFloor[f].push(s);
   });
 
+  // Helper rules and info generator for space types
+  const getSpaceDetails = (space: any) => {
+    const isMoonlight = space.isMoonlightArea || space.areaName.includes('夜讀');
+    const type = space.spaceType || '';
+
+    let rules = [
+      'NTHU Active Student / Faculty Card required for access',
+      'Maximum session duration: 4 hours (renewable at kiosk if available)',
+      '15-minute check-in grace period after booking',
+    ];
+    let amenities = ['AC (空調)', 'High-speed Wi-Fi', 'Power Outlets (插座)'];
+
+    if (isMoonlight) {
+      rules = [
+        'Open 24 Hours a day, 365 days a year',
+        'Direct swipe entry using NTHU Student ID Card at entrance gate',
+        'Quiet study zone — silence maintained at all times',
+        'No advance online reservation required; kiosk or walk-in seating',
+      ];
+      amenities = ['24H Security Guard', 'Power Sockets per Desk', 'Hot/Cold Water Kiosk', 'High-Speed NTHU-WiFi'];
+    } else if (type.includes('討論室') || type.includes('團體室')) {
+      rules = [
+        'Minimum group requirement: 3+ NTHU students/faculty',
+        'Reserve up to 7 days in advance via libsms online portal',
+        'All group members must scan student ID at room door within 15 minutes',
+        'Whiteboard and screen projection equipment included',
+      ];
+      amenities = ['Private Soundproof Room', 'HDMI/Type-C Display Monitor', 'Whiteboard & Markers', 'Power Strip'];
+    } else if (type.includes('研究小間')) {
+      rules = [
+        'Dedicated single-person study carrel for graduate & undergraduate research',
+        'Reserve online up to 3 days in advance',
+        'Keycard check-out at 1F Service Counter or smart lock entry',
+      ];
+      amenities = ['Private Enclosed Desk', 'Desk Lamp', 'Dual Power Sockets', 'Ergonomic Chair'];
+    } else if (type.includes('資訊島') || type.includes('電腦')) {
+      rules = [
+        'Equipped with desktop PC and Windows/Linux environment',
+        'Login using NTHU Student Portal credentials upon seating',
+        'Direct printing access to library campus network printers',
+      ];
+      amenities = ['27" Monitor PC', 'NTHU Portal Login', 'Campus Cloud Printing', 'USB Ports'];
+    } else if (type.includes('聆賞席')) {
+      rules = [
+        'Individual audiovisual viewing and listening workstation',
+        'Borrow DVDs/CDs from 3F AV Desk prior to seating',
+      ];
+      amenities = ['HD Display Screen', 'Hi-Fi Headphones', 'DVD/Bluray Player', 'Reclining Seat'];
+    }
+
+    return { rules, amenities };
+  };
+
   return (
     <div className="space-y-6 pb-12">
       {/* Header Banner */}
@@ -96,7 +151,7 @@ export default function LibraryPage() {
             Library & Study Spaces
           </h1>
           <p className="text-sm text-theme-muted mt-1">
-            Real-time seat vacancies, Moonlight Reading Area (夜讀區 24H), discussion rooms & booking shortcuts.
+            Click any space card for live details & direct booking links to libsms.lib.nthu.edu.tw.
           </p>
         </div>
 
@@ -124,7 +179,7 @@ export default function LibraryPage() {
         <div className="text-center py-16 text-theme-muted">Fetching library space data...</div>
       ) : libData ? (
         <div className="space-y-8">
-          {/* Library Operating Hours Cards */}
+          {/* Library Operating Hours Cards (Clickable) */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {libData.libraries?.map((lib: any) => {
               const libInfo = getPinyinAndEnglish(lib.name);
@@ -132,10 +187,11 @@ export default function LibraryPage() {
               return (
                 <div
                   key={lib.name}
-                  className={`p-5 rounded-3xl border space-y-2 shadow-sm transition-all ${
+                  onClick={() => setSelectedLibModal(lib)}
+                  className={`p-5 rounded-3xl border space-y-2 shadow-sm transition-all cursor-pointer hover:scale-[1.02] ${
                     isMoon
-                      ? 'bg-purple-950/30 border-purple-500/40 hover:border-purple-400/60'
-                      : 'bg-theme-card border-theme-border hover:border-indigo-500/40'
+                      ? 'bg-purple-950/30 border-purple-500/40 hover:border-purple-400/80 hover:shadow-purple-500/20'
+                      : 'bg-theme-card border-theme-border hover:border-indigo-500/60 hover:shadow-indigo-500/10'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -160,10 +216,15 @@ export default function LibraryPage() {
                       {lib.status}
                     </span>
                   </div>
-                  <p className="text-xs text-theme-muted flex items-center gap-1.5 pt-1">
-                    <Clock className="w-3.5 h-3.5 text-indigo-400" />
-                    <span>{lib.hours}</span>
-                  </p>
+                  <div className="flex items-center justify-between text-xs text-theme-muted pt-1">
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-indigo-400" />
+                      {lib.hours}
+                    </span>
+                    <span className="text-[11px] text-indigo-400 font-bold hover:underline flex items-center gap-0.5">
+                      Details <ExternalLink className="w-3 h-3" />
+                    </span>
+                  </div>
                 </div>
               );
             })}
@@ -258,7 +319,7 @@ export default function LibraryPage() {
             </div>
           </div>
 
-          {/* Seat & Space Vacancy Gauge Cards Sorted by Floor Level */}
+          {/* Seat & Space Vacancy Gauge Cards (Clickable) */}
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-theme-text flex items-center gap-2">
@@ -316,10 +377,11 @@ export default function LibraryPage() {
                             key={idx}
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className={`p-5 rounded-3xl border transition-all space-y-4 shadow-sm flex flex-col justify-between ${
+                            onClick={() => setSelectedSpace(space)}
+                            className={`p-5 rounded-3xl border transition-all space-y-4 shadow-sm flex flex-col justify-between cursor-pointer hover:scale-[1.02] ${
                               isMoonlight
-                                ? 'bg-purple-950/20 border-purple-500/40 hover:border-purple-400/70'
-                                : 'bg-theme-card border-theme-border hover:border-indigo-500/40'
+                                ? 'bg-purple-950/20 border-purple-500/40 hover:border-purple-400/80 hover:shadow-purple-500/20'
+                                : 'bg-theme-card border-theme-border hover:border-indigo-500/60 hover:shadow-indigo-500/10'
                             }`}
                           >
                             <div className="space-y-2">
@@ -386,7 +448,9 @@ export default function LibraryPage() {
                               </div>
                               <div className="flex items-center justify-between text-[11px] text-theme-muted font-medium">
                                 <span>{space.isClosed ? 'Closed (已閉館)' : `${pct}% Occupied (已使用)`}</span>
-                                <span>Capacity: {total} Seats</span>
+                                <span className="text-indigo-400 font-bold hover:underline flex items-center gap-0.5">
+                                  Click for details & book ↗
+                                </span>
                               </div>
                             </div>
                           </motion.div>
@@ -421,6 +485,260 @@ export default function LibraryPage() {
         </div>
       ) : null}
 
+      {/* SPACE DETAILS & DIRECT BOOKING MODAL */}
+      <AnimatePresence>
+        {selectedSpace && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="w-full max-w-xl bg-theme-card border border-theme-border rounded-3xl p-6 shadow-2xl space-y-5"
+            >
+              {/* Modal Header */}
+              {(() => {
+                const spaceInfo = getPinyinAndEnglish(selectedSpace.areaName);
+                const typeInfo = getPinyinAndEnglish(selectedSpace.spaceType);
+                const isMoonlight = selectedSpace.isMoonlightArea || selectedSpace.areaName.includes('夜讀');
+                const total = selectedSpace.totalSeats || 50;
+                const free = selectedSpace.freeSeats || 0;
+                const pct = Math.min(100, Math.max(0, Math.round(((total - free) / total) * 100)));
+                const { rules, amenities } = getSpaceDetails(selectedSpace);
+
+                return (
+                  <>
+                    <div className="flex items-start justify-between border-b border-theme-border pb-4 gap-3">
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${
+                              isMoonlight
+                                ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                                : selectedSpace.isClosed
+                                ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
+                                : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
+                            }`}
+                          >
+                            {isMoonlight ? '🌙 24H Moonlight Area (夜讀區)' : selectedSpace.floor}
+                          </span>
+                          <span className="px-2 py-0.5 rounded-md bg-theme-bg text-theme-muted border border-theme-border text-xs font-semibold">
+                            {typeInfo.english}
+                          </span>
+                        </div>
+                        <h3 className="text-xl font-extrabold text-theme-text">
+                          {spaceInfo.original}
+                        </h3>
+                        <p className="text-xs text-indigo-400 font-medium">
+                          {spaceInfo.pinyin} • {spaceInfo.english}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setSelectedSpace(null)}
+                        className="p-2 rounded-xl hover:bg-theme-bg border border-theme-border text-theme-muted hover:text-theme-text shrink-0"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    {/* Live Vacancy Box */}
+                    <div
+                      className={`p-4 rounded-2xl border space-y-2 ${
+                        isMoonlight
+                          ? 'bg-purple-950/40 border-purple-500/40'
+                          : selectedSpace.isClosed
+                          ? 'bg-rose-950/20 border-rose-500/30'
+                          : 'bg-indigo-950/30 border-indigo-500/30'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-theme-muted uppercase tracking-wider">
+                          Real-time Seat Vacancy Status
+                        </span>
+                        <span
+                          className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold border ${
+                            selectedSpace.isClosed
+                              ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                              : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                          }`}
+                        >
+                          {selectedSpace.isClosed ? 'CLOSED (已閉館)' : `${free} Free Seats`}
+                        </span>
+                      </div>
+
+                      <div className="w-full bg-theme-bg rounded-full h-3.5 overflow-hidden border border-theme-border">
+                        <div
+                          className={`h-full transition-all duration-500 rounded-full ${
+                            selectedSpace.isClosed
+                              ? 'bg-gray-600/40'
+                              : isMoonlight
+                              ? 'bg-purple-400'
+                              : pct > 80
+                              ? 'bg-rose-400'
+                              : pct > 50
+                              ? 'bg-amber-400'
+                              : 'bg-emerald-400'
+                          }`}
+                          style={{ width: `${selectedSpace.isClosed ? 0 : pct}%` }}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs font-semibold text-theme-muted pt-0.5">
+                        <span>{selectedSpace.isClosed ? 'Closed for the night' : `${pct}% Capacity Occupied`}</span>
+                        <span>Total Capacity: {total} Seats</span>
+                      </div>
+                    </div>
+
+                    {/* Equipment & Facilities Badges */}
+                    <div className="space-y-1.5">
+                      <span className="text-xs font-bold text-theme-muted uppercase tracking-wider">
+                        Available Amenities & Facilities:
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {amenities.map((am, i) => (
+                          <span
+                            key={i}
+                            className="px-3 py-1 rounded-xl bg-theme-bg border border-theme-border text-xs text-theme-text font-medium flex items-center gap-1.5"
+                          >
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                            {am}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Booking Rules & Instructions */}
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-theme-muted uppercase tracking-wider">
+                        Space Booking Rules & Guidelines (預約與使用規則):
+                      </span>
+                      <div className="space-y-1.5 text-xs text-theme-muted bg-theme-bg p-3.5 rounded-2xl border border-theme-border">
+                        {rules.map((r, i) => (
+                          <div key={i} className="flex items-start gap-2">
+                            <span className="text-indigo-400 font-bold">•</span>
+                            <span>{r}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Direct Booking Link Action Button */}
+                    <div className="pt-2 flex items-center justify-between gap-3 border-t border-theme-border">
+                      <button
+                        onClick={() => setSelectedSpace(null)}
+                        className="px-4 py-2.5 rounded-2xl bg-theme-bg border border-theme-border text-xs font-bold text-theme-muted hover:text-theme-text hover:bg-theme-card transition-all"
+                      >
+                        Close
+                      </button>
+                      <a
+                        href="https://libsms.lib.nthu.edu.tw"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 py-3 px-5 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-extrabold text-xs text-center hover:brightness-110 transition-all shadow-glow flex items-center justify-center gap-2"
+                      >
+                        Book Now on libsms.lib.nthu.edu.tw 🔗 ↗
+                      </a>
+                    </div>
+                  </>
+                );
+              })()}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* LIBRARY BRANCH DETAILS MODAL */}
+      <AnimatePresence>
+        {selectedLibModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-lg bg-theme-card border border-theme-border rounded-3xl p-6 shadow-2xl space-y-4"
+            >
+              {(() => {
+                const libInfo = getPinyinAndEnglish(selectedLibModal.name);
+                const isMoon = selectedLibModal.name.includes('夜讀區');
+
+                return (
+                  <>
+                    <div className="flex items-center justify-between border-b border-theme-border pb-4">
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[11px] font-bold mb-1">
+                          <Library className="w-3.5 h-3.5 text-indigo-400" />
+                          NTHU Library Facility
+                        </div>
+                        <h3 className="text-xl font-extrabold text-theme-text">
+                          {libInfo.original}
+                        </h3>
+                        <p className="text-xs text-indigo-400 font-medium">
+                          {libInfo.pinyin} • {libInfo.english}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setSelectedLibModal(null)}
+                        className="p-2 rounded-xl hover:bg-theme-bg border border-theme-border text-theme-muted hover:text-theme-text"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-3 text-xs text-theme-text">
+                      <div className="p-4 rounded-2xl bg-theme-bg border border-theme-border space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-theme-muted">Status (營運狀態):</span>
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${
+                              isMoon
+                                ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                                : selectedLibModal.status === 'Open'
+                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                                : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
+                            }`}
+                          >
+                            {selectedLibModal.status}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-theme-muted">Opening Hours (開放時間):</span>
+                          <span className="font-extrabold text-indigo-400">{selectedLibModal.hours}</span>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-2xl bg-theme-bg border border-theme-border space-y-1.5">
+                        <p className="font-bold text-indigo-400">Library Services & Features:</p>
+                        <p className="text-theme-muted leading-relaxed">
+                          {isMoon
+                            ? 'Open 24 hours daily on 4F & 1F Main Library. Requires NTHU student ID swipe at gate.'
+                            : 'Access to general book stacks, study seats, group discussion rooms, computer islands, multi-function printers, and self-service borrowing kiosks.'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between gap-3 border-t border-theme-border">
+                      <button
+                        onClick={() => setSelectedLibModal(null)}
+                        className="px-4 py-2.5 rounded-2xl bg-theme-bg border border-theme-border text-xs font-bold text-theme-muted hover:text-theme-text"
+                      >
+                        Close
+                      </button>
+                      <a
+                        href="https://libsms.lib.nthu.edu.tw"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 py-2.5 px-4 rounded-2xl bg-indigo-500 text-white font-extrabold text-xs text-center hover:bg-indigo-400 transition-all shadow-glow flex items-center justify-center gap-1.5"
+                      >
+                        Book Seat / Room on libsms 🔗 ↗
+                      </a>
+                    </div>
+                  </>
+                );
+              })()}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Reservation Guide Modal */}
       <AnimatePresence>
         {showGuideModal && (
@@ -437,7 +755,7 @@ export default function LibraryPage() {
                     <Library className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-theme-text">How to Book Seats & Study Rooms (預約指南)</h3>
+                    <h3 className="text-lg font-bold text-theme-text">How to Book Seats & Study Rooms (預預指南)</h3>
                     <p className="text-xs text-theme-muted">Official NTHU Library Space Management System Guide</p>
                   </div>
                 </div>
