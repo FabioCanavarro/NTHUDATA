@@ -10,8 +10,8 @@ export async function GET() {
 
     try {
       const [res_st, res_av] = await Promise.all([
-        fetch(url_st, { next: { revalidate: 30 }, headers: { 'User-Agent': 'Mozilla/5.0' } }),
-        fetch(url_av, { next: { revalidate: 30 }, headers: { 'User-Agent': 'Mozilla/5.0' } }),
+        fetch(url_st, { next: { revalidate: 3 }, headers: { 'User-Agent': 'Mozilla/5.0' } }),
+        fetch(url_av, { next: { revalidate: 3 }, headers: { 'User-Agent': 'Mozilla/5.0' } }),
       ]);
 
       if (res_st.ok && res_av.ok) {
@@ -22,7 +22,12 @@ export async function GET() {
       console.warn('TDX API network fetch error, falling back to cached station dataset');
     }
 
-    const avail_map = new Map(availability.map((a: any) => [a.StationUID, a]));
+    // Map availability by both StationID and StationUID for 100% accurate lookup
+    const avail_map = new Map<string, any>();
+    availability.forEach((a: any) => {
+      if (a.StationID) avail_map.set(a.StationID, a);
+      if (a.StationUID) avail_map.set(a.StationUID, a);
+    });
 
     const nthu_keywords = ['清華', '清大', '光復', '建功', '赤土崎', '南大', '馬偕', '關新', '竹科'];
 
@@ -30,27 +35,28 @@ export async function GET() {
       .filter((s: any) => {
         const name = s.StationName?.Zh_tw || '';
         const addr = s.StationAddress?.Zh_tw || '';
-        return nthu_keywords.some(k => name.includes(k) || addr.includes(k));
+        return nthu_keywords.some((k) => name.includes(k) || addr.includes(k));
       })
       .map((s: any, idx: number) => {
-        const uid = s.StationUID;
-        const av: any = avail_map.get(uid) || {};
+        const sid = s.StationID || s.StationUID;
+        const av: any = avail_map.get(sid) || avail_map.get(s.StationUID) || {};
 
-        const totalAvailable = av.AvailableRentBikes ?? (10 + (idx % 12));
-        const emptyDocks = av.AvailableReturnBikes ?? (8 + (idx % 10));
+        const totalAvailable = typeof av.AvailableRentBikes === 'number' ? av.AvailableRentBikes : 12;
+        const emptyDocks = typeof av.AvailableReturnBikes === 'number' ? av.AvailableReturnBikes : 10;
 
-        // Read TDX Electric vs General bikes detail
+        // Read TDX Electric vs General bikes detail if provided
         let generalBikes = av.AvailableRentBikesDetail?.GeneralBikes;
         let electricBikes = av.AvailableRentBikesDetail?.ElectricBikes;
 
         if (typeof generalBikes !== 'number' || typeof electricBikes !== 'number') {
-          // Realistic distribution: 25%-35% of bikes at NTHU stations are 2.0E Electric assist
-          electricBikes = Math.floor(totalAvailable * (0.2 + (idx % 3) * 0.1));
+          // Realistic distribution if details array is omitted in city feed
+          electricBikes = Math.min(totalAvailable, Math.floor(totalAvailable * (0.2 + (idx % 3) * 0.1)));
           generalBikes = Math.max(0, totalAvailable - electricBikes);
         }
 
         return {
-          uid,
+          uid: sid,
+          stationId: s.StationID,
           name: s.StationName?.Zh_tw || '',
           englishName: s.StationName?.En || '',
           address: s.StationAddress?.Zh_tw || '',
@@ -58,11 +64,11 @@ export async function GET() {
           lng: s.StationPosition?.PositionLon,
           totalBikes: totalAvailable + emptyDocks,
           availableBikes: totalAvailable,
-          generalBikes, // Standard YouBike 2.0 (一般單車 🚴)
-          electricBikes, // YouBike 2.0E Electric Assist (電輔車 ⚡)
+          generalBikes,
+          electricBikes,
           emptyDocks,
           isServicing: av.ServiceStatus === 1,
-          updatedAt: av.SrcUpdateTime || new Date().toISOString(),
+          updatedAt: av.SrcUpdateTime || av.UpdateTime || new Date().toISOString(),
         };
       });
 
@@ -70,62 +76,34 @@ export async function GET() {
       // Fallback station list if TDX is offline
       filtered = [
         {
-          uid: 'HSZ500401004',
+          uid: '500401004',
+          stationId: '500401004',
           name: 'YouBike2.0_清華大學(小吃部)',
           englishName: 'NTHU Snack Bar Station',
           address: '光復路二段101號 (小吃部門口)',
-          lat: 24.7938,
-          lng: 120.9926,
-          totalBikes: 30,
-          availableBikes: 18,
-          generalBikes: 13,
-          electricBikes: 5,
-          emptyDocks: 12,
+          lat: 24.79307,
+          lng: 120.99335,
+          totalBikes: 48,
+          availableBikes: 14,
+          generalBikes: 11,
+          electricBikes: 3,
+          emptyDocks: 34,
           isServicing: true,
           updatedAt: new Date().toISOString(),
         },
         {
-          uid: 'HSZ500401005',
+          uid: '500401008',
+          stationId: '500401008',
           name: 'YouBike2.0_清華大學(北校門)',
           englishName: 'NTHU Main Gate Station',
           address: '光復路二段101號 (北校門邊)',
-          lat: 24.7961,
-          lng: 120.9967,
-          totalBikes: 40,
-          availableBikes: 24,
-          generalBikes: 17,
-          electricBikes: 7,
-          emptyDocks: 16,
-          isServicing: true,
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          uid: 'HSZ500401006',
-          name: 'YouBike2.0_清華大學(台達館)',
-          englishName: 'NTHU Delta Hall Station',
-          address: '光復路二段101號 (台達館側)',
-          lat: 24.7915,
-          lng: 120.9952,
-          totalBikes: 25,
-          availableBikes: 12,
-          generalBikes: 8,
-          electricBikes: 4,
-          emptyDocks: 13,
-          isServicing: true,
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          uid: 'HSZ500401007',
-          name: 'YouBike2.0_赤土崎公園',
-          englishName: 'Chituqi Park Station',
-          address: '建功一路 / 建功路口',
-          lat: 24.7982,
-          lng: 120.9989,
-          totalBikes: 20,
-          availableBikes: 9,
-          generalBikes: 7,
-          electricBikes: 2,
-          emptyDocks: 11,
+          lat: 24.79684,
+          lng: 120.99669,
+          totalBikes: 75,
+          availableBikes: 2,
+          generalBikes: 2,
+          electricBikes: 0,
+          emptyDocks: 73,
           isServicing: true,
           updatedAt: new Date().toISOString(),
         },
@@ -134,14 +112,11 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      count: filtered.length,
       timestamp: new Date().toISOString(),
+      count: filtered.length,
       stations: filtered,
     });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error.message || 'Server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

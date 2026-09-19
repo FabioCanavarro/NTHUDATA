@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Library, Clock, Users, BookOpen, ExternalLink, Search, Layers, HelpCircle, X, CheckCircle2, ArrowRight, Moon, Sparkles } from 'lucide-react';
+import { Library, Clock, Users, BookOpen, ExternalLink, Search, Layers, HelpCircle, X, CheckCircle2, Moon, Sparkles, Filter } from 'lucide-react';
 import { StarButton } from '@/components/StarButton';
 import { getPinyinAndEnglish } from '@/utils/pinyin';
 
@@ -11,6 +11,7 @@ export default function LibraryPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedFloor, setSelectedFloor] = useState<string>('ALL');
+  const [selectedType, setSelectedType] = useState<string>('ALL');
   const [showGuideModal, setShowGuideModal] = useState(false);
 
   const loadLibraryData = async () => {
@@ -44,7 +45,17 @@ export default function LibraryPage() {
     floors.unshift('Moonlight Area (夜讀區)');
   }
 
-  // Filter spaces based on search and floor tab
+  const spaceTypes = [
+    { id: 'ALL', label: 'All Types (全部類型)' },
+    { id: '討論室', label: 'Discussion Rooms (討論室)' },
+    { id: '研究小間', label: 'Individual Study Carrels (研究小間)' },
+    { id: '資訊島', label: 'PC Workstations (資訊島)' },
+    { id: '夜讀區', label: 'Moonlight Area (夜讀區 24H)' },
+    { id: '聆賞席', label: 'AV Listening Seats (聆賞席)' },
+    { id: '團體室', label: 'Group Activity Rooms (團體室)' },
+  ];
+
+  // Filter spaces based on search, floor tab, and space type
   const filteredSpaces = spaces.filter((space: any) => {
     const spaceInfo = getPinyinAndEnglish(space.areaName);
     const typeInfo = getPinyinAndEnglish(space.spaceType);
@@ -59,6 +70,7 @@ export default function LibraryPage() {
 
     if (!matchesSearch) return false;
     if (selectedFloor !== 'ALL' && space.floor !== selectedFloor) return false;
+    if (selectedType !== 'ALL' && !space.spaceType.includes(selectedType) && !space.areaName.includes(selectedType)) return false;
 
     return true;
   });
@@ -84,7 +96,7 @@ export default function LibraryPage() {
             Library & Study Spaces
           </h1>
           <p className="text-sm text-theme-muted mt-1">
-            Real-time seat vacancies, Moonlight Reading Area (夜讀區 24H), study room availability, and floor guides.
+            Real-time seat vacancies, Moonlight Reading Area (夜讀區 24H), discussion rooms & booking shortcuts.
           </p>
         </div>
 
@@ -140,7 +152,9 @@ export default function LibraryPage() {
                       className={`px-2 py-0.5 rounded-full text-[10px] font-bold border shrink-0 ${
                         isMoon
                           ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-                          : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                          : lib.status === 'Open'
+                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                          : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
                       }`}
                     >
                       {lib.status}
@@ -155,8 +169,8 @@ export default function LibraryPage() {
             })}
           </div>
 
-          {/* Filter Bar & Floor Level Tabs */}
-          <div className="space-y-3">
+          {/* Search, Space Type & Floor Level Tabs */}
+          <div className="space-y-4">
             <div className="flex flex-col sm:flex-row items-center gap-3">
               <div className="relative flex-1 w-full">
                 <Search className="w-4 h-4 text-theme-muted absolute left-3.5 top-3.5" />
@@ -164,54 +178,83 @@ export default function LibraryPage() {
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search by area name, Moonlight Area, floor, or type in English / Pinyin / 中文 (e.g. Moonlight, 夜讀區, 4F, Discussion)..."
+                  placeholder="Search by area name, Moonlight Area, floor, or type in English / Pinyin / 中文 (e.g. Moonlight, 夜讀區, 討論室, Discussion)..."
                   className="w-full bg-theme-card border border-theme-border hover:border-indigo-500/50 focus:border-indigo-500 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-theme-text placeholder-theme-muted focus:outline-none transition-all"
                 />
               </div>
             </div>
 
-            {/* Floor Filter Tabs */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
-              <button
-                onClick={() => setSelectedFloor('ALL')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 border transition-all ${
-                  selectedFloor === 'ALL'
-                    ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/50 shadow-glow'
-                    : 'bg-theme-card border-theme-border text-theme-muted hover:text-theme-text'
-                }`}
-              >
-                All Floors ({spaces.length})
-              </button>
-
-              {/* Dedicated Moonlight Area Quick Filter */}
-              <button
-                onClick={() => setSelectedFloor('Moonlight Area (夜讀區)')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 border transition-all flex items-center gap-1.5 ${
-                  selectedFloor === 'Moonlight Area (夜讀區)'
-                    ? 'bg-purple-500/30 text-purple-300 border-purple-400/60 shadow-glow'
-                    : 'bg-purple-950/40 border-purple-500/30 text-purple-300 hover:border-purple-400/50'
-                }`}
-              >
-                <Moon className="w-3.5 h-3.5 text-purple-300 fill-purple-300/20" />
-                <span>🌙 Moonlight Area (夜讀區 24H)</span>
-              </button>
-
-              {floors.map((f: any) => {
-                if (f === 'Moonlight Area (夜讀區)') return null;
-                return (
+            {/* Space Type Filter Pills */}
+            <div className="space-y-2">
+              <div className="text-xs font-bold text-theme-muted flex items-center gap-1.5 uppercase tracking-wider">
+                <Filter className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Sort by Space Type (類型篩選):</span>
+              </div>
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+                {spaceTypes.map((st) => (
                   <button
-                    key={f}
-                    onClick={() => setSelectedFloor(f)}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0 border transition-all ${
-                      selectedFloor === f
-                        ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/50 shadow-glow'
+                    key={st.id}
+                    onClick={() => setSelectedType(st.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold shrink-0 border transition-all ${
+                      selectedType === st.id
+                        ? 'bg-indigo-500 text-white border-indigo-400 shadow-glow font-bold'
                         : 'bg-theme-card border-theme-border text-theme-muted hover:text-theme-text'
                     }`}
                   >
-                    {f}
+                    {st.label}
                   </button>
-                );
-              })}
+                ))}
+              </div>
+            </div>
+
+            {/* Floor Filter Tabs */}
+            <div className="space-y-2 pt-1">
+              <div className="text-xs font-bold text-theme-muted flex items-center gap-1.5 uppercase tracking-wider">
+                <Layers className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Sort by Floor Level (樓層篩選):</span>
+              </div>
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+                <button
+                  onClick={() => setSelectedFloor('ALL')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 border transition-all ${
+                    selectedFloor === 'ALL'
+                      ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/50 shadow-glow'
+                      : 'bg-theme-card border-theme-border text-theme-muted hover:text-theme-text'
+                  }`}
+                >
+                  All Floors ({spaces.length})
+                </button>
+
+                {/* Dedicated Moonlight Area Quick Filter */}
+                <button
+                  onClick={() => setSelectedFloor('Moonlight Area (夜讀區)')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 border transition-all flex items-center gap-1.5 ${
+                    selectedFloor === 'Moonlight Area (夜讀區)'
+                      ? 'bg-purple-500/30 text-purple-300 border-purple-400/60 shadow-glow'
+                      : 'bg-purple-950/40 border-purple-500/30 text-purple-300 hover:border-purple-400/50'
+                  }`}
+                >
+                  <Moon className="w-3.5 h-3.5 text-purple-300 fill-purple-300/20" />
+                  <span>🌙 Moonlight Area (夜讀區 24H)</span>
+                </button>
+
+                {floors.map((f: any) => {
+                  if (f === 'Moonlight Area (夜讀區)') return null;
+                  return (
+                    <button
+                      key={f}
+                      onClick={() => setSelectedFloor(f)}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 border transition-all ${
+                        selectedFloor === f
+                          ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/50 shadow-glow'
+                          : 'bg-theme-card border-theme-border text-theme-muted hover:text-theme-text'
+                      }`}
+                    >
+                      {f}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
@@ -222,12 +265,14 @@ export default function LibraryPage() {
                 <Users className="w-5 h-5 text-indigo-400" />
                 Real-time Seat & Area Vacancies (即時座位數)
               </h2>
-              <button
-                onClick={() => setShowGuideModal(true)}
+              <a
+                href="https://libsms.lib.nthu.edu.tw"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs text-indigo-400 font-bold hover:underline flex items-center gap-1"
               >
-                Need help reserving seats? 📖 Guide ↗
-              </button>
+                Go to libsms.lib.nthu.edu.tw 🔗 Booking Site ↗
+              </a>
             </div>
 
             {Object.keys(groupedByFloor).length === 0 ? (
@@ -354,41 +399,24 @@ export default function LibraryPage() {
             )}
           </div>
 
-          {/* Library News & RSS Bulletins */}
-          <div className="p-6 rounded-3xl bg-theme-card border border-theme-border space-y-4">
-            <h2 className="text-lg font-bold text-theme-text flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-indigo-400" />
-              Library News & RSS Bulletins (最新公告)
-            </h2>
-            <div className="space-y-2">
-              {libData.rssFeeds?.map((rss: any, idx: number) => {
-                const rssInfo = getPinyinAndEnglish(rss.title);
-                return (
-                  <a
-                    key={idx}
-                    href={rss.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3.5 rounded-2xl bg-theme-bg/70 hover:bg-theme-bg border border-theme-border hover:border-indigo-500/40 flex items-center justify-between gap-4 transition-all group"
-                  >
-                    <div className="space-y-1">
-                      <h4 className="text-xs font-bold text-theme-text group-hover:text-indigo-400 transition-colors">
-                        {rssInfo.original}
-                      </h4>
-                      <p className="text-[11px] text-theme-muted">
-                        {rssInfo.pinyin} • {rssInfo.english}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-[10px] text-indigo-400 font-mono font-bold bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20">
-                        {rss.date}
-                      </span>
-                      <ExternalLink className="w-3.5 h-3.5 text-theme-muted group-hover:text-indigo-400 transition-colors" />
-                    </div>
-                  </a>
-                );
-              })}
+          {/* Bottom Shortcut Banner to NTHU Official Booking Site */}
+          <div className="p-6 rounded-3xl bg-indigo-950/40 border border-indigo-500/40 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+            <div className="space-y-1 text-center md:text-left">
+              <h3 className="text-lg font-extrabold text-indigo-200 flex items-center justify-center md:justify-start gap-2">
+                <span>NTHU Library Seat & Study Room Booking System</span>
+              </h3>
+              <p className="text-xs text-indigo-300/80">
+                Official SMS portal for reserving discussion rooms, individual study carrels & overnight seats.
+              </p>
             </div>
+            <a
+              href="https://libsms.lib.nthu.edu.tw"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 rounded-2xl bg-indigo-500 text-white font-extrabold text-xs hover:bg-indigo-400 transition-all flex items-center gap-2 shadow-glow shrink-0"
+            >
+              Go to libsms.lib.nthu.edu.tw 🔗 Booking Site ↗
+            </a>
           </div>
         </div>
       ) : null}

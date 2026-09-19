@@ -4,19 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Star,
-  Sparkles,
   Bike,
   WashingMachine,
-  Bus,
   Library,
   UtensilsCrossed,
-  BookOpen,
   RefreshCw,
-  SlidersHorizontal,
   Dumbbell,
   Zap,
   SearchCheck,
-  Download,
+  ExternalLink,
 } from 'lucide-react';
 import { useFavorites } from '@/context/FavoritesContext';
 import { StarButton } from '@/components/StarButton';
@@ -67,22 +63,46 @@ export default function HomePage() {
 
   return (
     <div className="space-y-6 sm:space-y-8 pb-12">
-      {/* Hero Welcome Banner */}
+      {/* Hero Welcome Banner — NO LOGO, NO FLASHING GREEN DOT */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-theme-card via-theme-card-hover to-theme-card border border-theme-border p-5 sm:p-8 shadow-2xl">
-        <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-theme-primary/20 rounded-full blur-3xl pointer-events-none"></div>
         <div className="relative z-10 space-y-3 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-theme-primary/20 border border-theme-primary/40 text-theme-primary text-xs font-bold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            NTHU Unified Campus OS & PWA App
+            NTHU Unified Campus OS Platform
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-theme-text tracking-tight">
             Welcome to <span className="text-theme-primary">NTHU Hub</span>
           </h1>
           <p className="text-xs sm:text-sm md:text-base text-theme-muted leading-relaxed">
-            Real-time IoT data, YouBike 2.0 availability, MQTT laundry machines, campus shuttle buses, dining venues, and downloadable offline campus app.
+            Real-time IoT data, YouBike 2.0 availability, WipePay laundry status, campus dining directory, gym availability, and library seat trackers.
           </p>
         </div>
       </div>
+
+      {/* Featured NTHUMOD Shortcut Banner */}
+      <a
+        href="https://nthumod.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-indigo-950/80 via-purple-950/60 to-indigo-950/80 border border-indigo-500/40 hover:border-indigo-400 shadow-xl transition-all group"
+      >
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] font-extrabold uppercase">
+              ⚡ Ultimate Course & Timetable Planner
+            </div>
+            <h3 className="text-xl font-black text-indigo-200 group-hover:text-white transition-colors">
+              NTHUMOD (nthumod.com)
+            </h3>
+            <p className="text-sm font-bold text-indigo-300">
+              "Just use nthu mod for planning and courses, peaks of peaks"
+            </p>
+          </div>
+          <div className="px-5 py-2.5 rounded-2xl bg-indigo-500 text-white font-extrabold text-xs group-hover:bg-indigo-400 transition-all flex items-center gap-2 shadow-glow shrink-0">
+            <span>Open NTHUMOD ↗</span>
+            <ExternalLink className="w-4 h-4" />
+          </div>
+        </div>
+      </a>
 
       {/* Top Quick Overview Stats Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -104,249 +124,86 @@ export default function HomePage() {
           <div className="min-w-0">
             <p className="text-[11px] sm:text-xs text-theme-muted font-medium truncate">Free Washers</p>
             <h3 className="text-xl sm:text-2xl font-bold text-theme-text">{loading ? '...' : totalFreeWashers}</h3>
-            <p className="text-[10px] sm:text-[11px] text-emerald-400 font-semibold truncate">Live MQTT</p>
+            <p className="text-[10px] sm:text-[11px] text-emerald-400 font-semibold truncate">16 Dormitories Monitor</p>
           </div>
         </div>
 
         <div className="p-4 sm:p-5 rounded-3xl bg-theme-card border border-theme-border flex items-center gap-3 sm:gap-4 hover:border-theme-primary/50 transition-all shadow-sm">
-          <div className="p-2.5 sm:p-3 rounded-2xl bg-purple-500/20 text-purple-400 border border-purple-500/30 shrink-0">
-            <Bus className="w-5 h-5 sm:w-6 sm:h-6" />
+          <div className="p-2.5 sm:p-3 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 shrink-0">
+            <Library className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] sm:text-xs text-theme-muted font-medium truncate">Shuttles</p>
-            <h3 className="text-xl sm:text-2xl font-bold text-theme-text">4 Active</h3>
-            <p className="text-[10px] sm:text-[11px] text-purple-400 font-semibold truncate">Main & Nanda</p>
+            <p className="text-[11px] sm:text-xs text-theme-muted font-medium truncate">Library 24H</p>
+            <h3 className="text-xl sm:text-2xl font-bold text-theme-text">Open</h3>
+            <p className="text-[10px] sm:text-[11px] text-indigo-400 font-semibold truncate">🌙 Moonlight Area Active</p>
           </div>
         </div>
 
         <div className="p-4 sm:p-5 rounded-3xl bg-theme-card border border-theme-border flex items-center gap-3 sm:gap-4 hover:border-theme-primary/50 transition-all shadow-sm">
-          <div className="p-2.5 sm:p-3 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
-            <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
+          <div className="p-2.5 sm:p-3 rounded-2xl bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0">
+            <UtensilsCrossed className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] sm:text-xs text-theme-muted font-medium truncate">Power Load</p>
-            <h3 className="text-xl sm:text-2xl font-bold text-theme-text">14.2 MW</h3>
-            <p className="text-[10px] sm:text-[11px] text-amber-400 font-semibold truncate">Realtime</p>
+            <p className="text-[11px] sm:text-xs text-theme-muted font-medium truncate">Dining Halls</p>
+            <h3 className="text-xl sm:text-2xl font-bold text-theme-text">Directory</h3>
+            <p className="text-[10px] sm:text-[11px] text-rose-400 font-semibold truncate">Live Status & Pinyin</p>
           </div>
         </div>
       </div>
 
-      {/* STARRED EVERYTHING DASHBOARD SECTION */}
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+      {/* Starred Favorites Section */}
+      <div className="space-y-4 pt-2">
+        <div className="flex items-center justify-between border-b border-theme-border pb-3">
           <div className="flex items-center gap-2">
             <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-            <h2 className="text-lg sm:text-xl font-bold text-theme-text tracking-tight">
-              Starred Pins & Favorite Widgets
+            <h2 className="text-lg sm:text-xl font-extrabold text-theme-text">
+              Your Starred Dashboard Items
             </h2>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-theme-muted font-medium">
-              {favorites.length} starred items
-            </span>
-            {favorites.length > 0 && (
-              <DataExporter data={favorites} filename="nthu_hub_favorites" title="Starred Favorites" />
-            )}
-          </div>
+          {favorites.length > 0 && (
+            <DataExporter
+              filename="nthu_hub_starred_favorites"
+              data={favorites}
+              title="Starred Items"
+            />
+          )}
         </div>
 
         {favorites.length === 0 ? (
-          <div className="p-6 sm:p-8 text-center rounded-3xl bg-theme-card/60 border border-dashed border-theme-border space-y-3">
-            <Star className="w-8 h-8 text-amber-400/50 mx-auto" />
-            <h3 className="text-base font-semibold text-theme-text">No Starred Items Yet</h3>
+          <div className="p-8 sm:p-12 text-center rounded-3xl bg-theme-card border border-theme-border space-y-3">
+            <p className="text-sm font-semibold text-theme-text">No starred items saved yet.</p>
             <p className="text-xs text-theme-muted max-w-md mx-auto">
-              Star any YouBike station, washing machine, bus route, food stall, course, or module by clicking the ★ star button!
+              Click the star icon ⭐ on any YouBike station, laundry dorm, food stall, or library space to pin it to your personal dashboard!
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {favorites.map((fav) => (
               <motion.div
                 key={fav.id}
                 layout
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="p-4 sm:p-5 rounded-3xl bg-theme-card border border-theme-border hover:border-theme-primary/40 transition-all space-y-3 relative group shadow-sm"
+                className="p-5 rounded-3xl bg-theme-card border border-theme-border hover:border-theme-primary/50 transition-all space-y-3 relative group shadow-sm flex flex-col justify-between"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-1 truncate">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-theme-bg border border-theme-border text-theme-primary inline-block mb-1">
-                      {fav.type}
-                    </span>
-                    <h3 className="text-sm font-bold text-theme-text truncate group-hover:text-theme-primary transition-colors">
-                      {fav.title}
-                    </h3>
-                    {fav.subtitle && (
-                      <p className="text-xs text-theme-muted truncate">{fav.subtitle}</p>
-                    )}
+                <div className="space-y-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-theme-primary/10 text-theme-primary border border-theme-primary/20 inline-block mb-1 uppercase">
+                        {fav.type}
+                      </span>
+                      <h3 className="text-base font-bold text-theme-text group-hover:text-theme-primary transition-colors">
+                        {fav.title}
+                      </h3>
+                    </div>
+                    <StarButton id={fav.id} type={fav.type} title={fav.title} subtitle={fav.subtitle} data={fav.data} />
                   </div>
-                  <StarButton id={fav.id} type={fav.type} title={fav.title} subtitle={fav.subtitle} data={fav.data} />
+                  <p className="text-xs text-theme-muted">{fav.subtitle}</p>
                 </div>
-
-                {/* Type-Specific Quick Widget Render */}
-                {fav.type === 'youbike' && (
-                  <div className="pt-2 border-t border-theme-border/50 flex items-center justify-between text-xs">
-                    <span className="text-theme-muted">Available Bikes</span>
-                    <span className="font-extrabold text-cyan-400">
-                      {youbikeData.find((s) => s.name.includes(fav.title) || s.uid === fav.data?.uid)?.availableBikes ?? 'Live'} bikes
-                    </span>
-                  </div>
-                )}
-
-                {fav.type === 'washer' && (
-                  <div className="pt-2 border-t border-theme-border/50 flex items-center justify-between text-xs">
-                    <span className="text-theme-muted">Dorm Machine Status</span>
-                    <span className="font-extrabold text-emerald-400">
-                      {laundryData.filter((m) => ((m.dorm || m.area || '').includes(fav.data?.name || fav.title.split(' ')[0])) && m.statusText === '空機').length} free machines
-                    </span>
-                  </div>
-                )}
-
-                {fav.type === 'bus' && (
-                  <div className="pt-2 border-t border-theme-border/50 flex items-center justify-between text-xs">
-                    <span className="text-theme-muted">Next Shuttle</span>
-                    <span className="font-extrabold text-purple-400">Scheduled Departure</span>
-                  </div>
-                )}
               </motion.div>
             ))}
           </div>
         )}
-      </div>
-
-      {/* Campus Modules Navigation Hub */}
-      <div className="space-y-4 pt-4">
-        <h2 className="text-lg sm:text-xl font-bold text-theme-text tracking-tight">Explore Campus Apps</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          <Link href="/youbike" className="group">
-            <div className="p-5 sm:p-6 rounded-3xl bg-theme-card border border-theme-border hover:border-cyan-500/50 hover:shadow-glow transition-all space-y-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Bike className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-theme-text group-hover:text-cyan-400 transition-colors">
-                  YouBike 2.0 Live Tracker
-                </h3>
-                <p className="text-xs text-theme-muted mt-1">
-                  Real-time bike & empty dock counters for campus stations.
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/laundry" className="group">
-            <div className="p-5 sm:p-6 rounded-3xl bg-theme-card border border-theme-border hover:border-emerald-500/50 hover:shadow-glow transition-all space-y-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <WashingMachine className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-theme-text group-hover:text-emerald-400 transition-colors">
-                  Laundry Hub (MQTT)
-                </h3>
-                <p className="text-xs text-theme-muted mt-1">
-                  Washing machine & dryer statuses with countdown timers.
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/buses" className="group">
-            <div className="p-5 sm:p-6 rounded-3xl bg-theme-card border border-theme-border hover:border-purple-500/50 hover:shadow-glow transition-all space-y-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Bus className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-theme-text group-hover:text-purple-400 transition-colors">
-                  Shuttle Bus Timetables
-                </h3>
-                <p className="text-xs text-theme-muted mt-1">
-                  Main & Nanda campus shuttle routes, stops, and schedules.
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/courses" className="group">
-            <div className="p-5 sm:p-6 rounded-3xl bg-theme-card border border-theme-border hover:border-indigo-500/50 hover:shadow-glow transition-all space-y-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-theme-text group-hover:text-indigo-400 transition-colors">
-                  Course Search Engine
-                </h3>
-                <p className="text-xs text-theme-muted mt-1">
-                  Search NTHU courses by code, teacher, room, and time.
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/dining" className="group">
-            <div className="p-5 sm:p-6 rounded-3xl bg-theme-card border border-theme-border hover:border-rose-500/50 hover:shadow-glow transition-all space-y-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <UtensilsCrossed className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-theme-text group-hover:text-rose-400 transition-colors">
-                  Food & Dining Venues
-                </h3>
-                <p className="text-xs text-theme-muted mt-1">
-                  Restaurants, dining halls, and opening hours across campus.
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/lost-and-found" className="group">
-            <div className="p-5 sm:p-6 rounded-3xl bg-theme-card border border-theme-border hover:border-teal-500/50 hover:shadow-glow transition-all space-y-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-teal-500/20 text-teal-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <SearchCheck className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-theme-text group-hover:text-teal-400 transition-colors">
-                  Lost & Found Portal
-                </h3>
-                <p className="text-xs text-theme-muted mt-1">
-                  Search live lost items reported at library & campus security.
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/gym" className="group">
-            <div className="p-5 sm:p-6 rounded-3xl bg-theme-card border border-theme-border hover:border-amber-500/50 hover:shadow-glow transition-all space-y-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Dumbbell className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-theme-text group-hover:text-amber-400 transition-colors">
-                  Gym & Sports Facilities
-                </h3>
-                <p className="text-xs text-theme-muted mt-1">
-                  Real-time headcount meters, court vacancy gauges & opening hours.
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/docs" className="group">
-            <div className="p-5 sm:p-6 rounded-3xl bg-theme-card border border-theme-border hover:border-theme-primary hover:shadow-glow transition-all space-y-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-theme-primary/20 text-theme-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-theme-text group-hover:text-theme-primary transition-colors">
-                  Developer API Platform
-                </h3>
-                <p className="text-xs text-theme-muted mt-1">
-                  Interactive Swagger-style testing for Next.js `/api/v1` routes.
-                </p>
-              </div>
-            </div>
-          </Link>
-        </div>
       </div>
     </div>
   );

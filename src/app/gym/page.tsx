@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Dumbbell, Search, MapPin, Clock, Users, RefreshCw, HelpCircle, X } from 'lucide-react';
+import { Dumbbell, Search, MapPin, Clock, Users, RefreshCw, HelpCircle, X, CreditCard, Calendar, AlertCircle } from 'lucide-react';
 import { StarButton } from '@/components/StarButton';
 
 interface SportsVenue {
@@ -12,13 +12,19 @@ interface SportsVenue {
   english: string;
   category: string;
   location: string;
+  weekdayHours: string;
+  weekendHours: string;
   hours: string;
-  status: 'OPEN' | 'CLOSING_SOON' | 'CLOSED';
+  status: 'OPEN' | 'CLOSING_SOON' | 'ON_BREAK' | 'CLOSED';
+  statusLabel: string;
   currentOccupancy?: number;
   maxCapacity?: number;
   totalCourts?: number;
   freeCourts?: number;
   feeInfo: string;
+  membershipInfo: string;
+  breakHours?: string;
+  peClassHours?: string;
   bookingInfo: string;
 }
 
@@ -72,13 +78,13 @@ export default function GymPage() {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 text-xs font-bold uppercase tracking-wider mb-2">
             <Dumbbell className="w-3.5 h-3.5" />
-            NTHU Athletics & PE Department • 體育館與場館即時動態
+            NTHU PE Department • 體育館與場館動態
           </div>
           <h1 className="text-3xl font-extrabold text-theme-text tracking-tight">
-            Gym & Sports Facilities Availability
+            Gym & Sports Facilities Schedule
           </h1>
           <p className="text-sm text-theme-muted mt-1">
-            Real-time headcount meters, court vacancy gauges, opening hours, and Pinyin & English facility titles.
+            Dynamic weekday/weekend hours, maintenance break alerts, PE class times, membership guide & court availability.
           </p>
         </div>
 
@@ -87,7 +93,7 @@ export default function GymPage() {
             onClick={() => setShowGuideModal(true)}
             className="px-4 py-2.5 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 flex items-center gap-2 text-xs font-bold transition-all shadow-glow"
           >
-            <HelpCircle className="w-4 h-4" /> Entry Guide (入場須知)
+            <CreditCard className="w-4 h-4" /> Gym Pass & Membership Guide (會員申辦指南)
           </button>
           <button
             onClick={fetchGymData}
@@ -143,8 +149,10 @@ export default function GymPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((v) => {
             const isClosed = v.status === 'CLOSED';
+            const isOnBreak = v.status === 'ON_BREAK';
+            const isOpen = v.status === 'OPEN' || v.status === 'CLOSING_SOON';
             const isHeadcount = v.currentOccupancy !== undefined && v.maxCapacity !== undefined;
-            const pct = isHeadcount ? (isClosed ? 0 : Math.round((v.currentOccupancy! / v.maxCapacity!) * 100)) : 0;
+            const pct = isHeadcount ? (isOpen ? Math.round((v.currentOccupancy! / v.maxCapacity!) * 100) : 0) : 0;
 
             return (
               <motion.div
@@ -157,15 +165,23 @@ export default function GymPage() {
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 inline-block">
                           {v.category}
                         </span>
-                        {isClosed && (
-                          <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                            CLOSED (已閉館)
-                          </span>
-                        )}
+                        <span
+                          className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                            v.status === 'OPEN'
+                              ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                              : v.status === 'CLOSING_SOON'
+                              ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                              : v.status === 'ON_BREAK'
+                              ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                              : 'bg-rose-500/20 text-rose-400 border-rose-500/30'
+                          }`}
+                        >
+                          {v.statusLabel}
+                        </span>
                       </div>
                       <h3 className="text-lg font-bold text-theme-text group-hover:text-amber-400 transition-colors pt-1">
                         {v.name}
@@ -184,6 +200,14 @@ export default function GymPage() {
                     />
                   </div>
 
+                  {/* On Break Alert Banner */}
+                  {isOnBreak && (
+                    <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
+                      <span>Midday Cleaning & Maintenance Break (清潔維護與休息時段)</span>
+                    </div>
+                  )}
+
                   {/* Occupancy or Court Meters */}
                   {isHeadcount ? (
                     <div className="space-y-1.5 pt-1">
@@ -191,34 +215,66 @@ export default function GymPage() {
                         <span className="text-theme-muted flex items-center gap-1 font-medium">
                           <Users className="w-3.5 h-3.5 text-amber-400" /> Live Headcount
                         </span>
-                        <span className={`font-extrabold ${isClosed ? 'text-rose-400' : 'text-amber-400'}`}>
-                          {isClosed ? `0 / ${v.maxCapacity} occupied (Closed 已閉館)` : `${v.currentOccupancy} / ${v.maxCapacity} occupied (${pct}%)`}
+                        <span
+                          className={`font-extrabold ${
+                            isClosed ? 'text-rose-400' : isOnBreak ? 'text-amber-300' : 'text-amber-400'
+                          }`}
+                        >
+                          {isClosed
+                            ? `0 / ${v.maxCapacity} occupied (Closed 已閉館)`
+                            : isOnBreak
+                            ? `0 / ${v.maxCapacity} occupied (Break 清潔中)`
+                            : `${v.currentOccupancy} / ${v.maxCapacity} occupied (${pct}%)`}
                         </span>
                       </div>
                       <div className="w-full bg-theme-bg rounded-full h-3 overflow-hidden border border-theme-border">
                         <div
                           className={`h-full transition-all duration-500 rounded-full ${
-                            isClosed ? 'bg-gray-600/40' : pct > 80 ? 'bg-rose-400' : pct > 50 ? 'bg-amber-400' : 'bg-emerald-400'
+                            isClosed || isOnBreak
+                              ? 'bg-gray-600/40'
+                              : pct > 80
+                              ? 'bg-rose-400'
+                              : pct > 50
+                              ? 'bg-amber-400'
+                              : 'bg-emerald-400'
                           }`}
-                          style={{ width: `${isClosed ? 0 : pct}%` }}
+                          style={{ width: `${isOpen ? pct : 0}%` }}
                         />
                       </div>
                     </div>
                   ) : v.totalCourts !== undefined ? (
                     <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between text-xs">
                       <span className="text-theme-muted font-medium">Available Courts</span>
-                      <span className={`font-extrabold text-sm ${isClosed ? 'text-rose-400' : 'text-amber-400'}`}>
-                        {isClosed ? `Closed (已閉館)` : `${v.freeCourts} of ${v.totalCourts} Courts Free`}
+                      <span
+                        className={`font-extrabold text-sm ${
+                          isClosed ? 'text-rose-400' : isOnBreak ? 'text-amber-300' : 'text-amber-400'
+                        }`}
+                      >
+                        {isClosed
+                          ? `Closed (已閉館)`
+                          : isOnBreak
+                          ? `Break (清潔中)`
+                          : `${v.freeCourts} of ${v.totalCourts} Courts Free`}
                       </span>
                     </div>
                   ) : null}
 
-                  {/* Details */}
+                  {/* Hours & Schedule Details */}
                   <div className="space-y-1.5 text-xs text-theme-muted pt-1 border-t border-theme-border/50">
                     <div className="flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      <span>Hours: {v.hours}</span>
+                      <span>Today's Hours: <strong className="text-theme-text">{v.hours}</strong></span>
                     </div>
+                    {v.breakHours && (
+                      <div className="text-[11px] text-amber-400/90 pl-5">
+                        • Break Hours: {v.breakHours}
+                      </div>
+                    )}
+                    {v.peClassHours && (
+                      <div className="text-[11px] text-indigo-400/90 pl-5">
+                        • {v.peClassHours}
+                      </div>
+                    )}
                     <div className="flex items-center gap-2">
                       <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                       <span className="truncate">{v.location}</span>
@@ -226,10 +282,10 @@ export default function GymPage() {
                   </div>
                 </div>
 
-                {/* Footer Notes */}
+                {/* Membership & Fee Notes */}
                 <div className="p-3 rounded-2xl bg-theme-bg/60 border border-theme-border text-[11px] space-y-1">
-                  <p className="text-amber-400/90 font-medium">💳 {v.feeInfo}</p>
-                  <p className="text-theme-muted">ℹ️ {v.bookingInfo}</p>
+                  <p className="text-amber-400/90 font-bold">💳 {v.feeInfo}</p>
+                  <p className="text-theme-muted">ℹ️ {v.membershipInfo}</p>
                 </div>
               </motion.div>
             );
@@ -237,7 +293,7 @@ export default function GymPage() {
         </div>
       )}
 
-      {/* PE Guide Modal */}
+      {/* Gym Membership & Pass Guide Modal */}
       <AnimatePresence>
         {showGuideModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
@@ -250,11 +306,11 @@ export default function GymPage() {
               <div className="flex items-center justify-between border-b border-theme-border pb-4">
                 <div className="flex items-center gap-2.5">
                   <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                    <Dumbbell className="w-5 h-5" />
+                    <CreditCard className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-theme-text">NTHU PE Facilities Guide (入場須知)</h3>
-                    <p className="text-xs text-theme-muted">Physical Education & Sports Facilities Policy</p>
+                    <h3 className="text-lg font-bold text-theme-text">NTHU Gym Membership Guide (會員與體育卡申辦指南)</h3>
+                    <p className="text-xs text-theme-muted">Physical Education & Sports Pass Policy</p>
                   </div>
                 </div>
                 <button
@@ -266,29 +322,29 @@ export default function GymPage() {
               </div>
 
               <div className="space-y-3 text-xs text-theme-text max-h-[60vh] overflow-y-auto pr-1">
-                <div className="p-3 rounded-2xl bg-theme-bg border border-theme-border space-y-1">
-                  <p className="font-bold text-amber-400">🏋️ Gym & Weight Room (體育館重訓室)</p>
-                  <p className="text-theme-muted">
-                    - Entry Fee: TWD $20 per entry or Semester Gym Pass.<br />
-                    - Scan valid NTHU Student ID or Faculty Card at turnstile.<br />
-                    - Proper athletic shoes and workout clothes required. Towel is mandatory.
+                <div className="p-3.5 rounded-2xl bg-theme-bg border border-theme-border space-y-1.5">
+                  <p className="font-bold text-amber-400">💳 Semester Gym Pass (體育館重訓卡)</p>
+                  <p className="text-theme-muted leading-relaxed">
+                    - Price: TWD $800 / semester.<br />
+                    - Unlimited entry to both Main Gym & Nanda Gym weight rooms.<br />
+                    - Application: Pay via NTHU Cashier or online system, bring payment receipt to PE Office (Main Gym B1) to bind to your Student ID card.
                   </p>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-theme-bg border border-theme-border space-y-1">
-                  <p className="font-bold text-amber-400">🏊 Aquatic Center (水木游泳池)</p>
-                  <p className="text-theme-muted">
-                    - Student Ticket: TWD $50 / entry.<br />
-                    - Swim cap and proper swimming attire strictly mandatory.<br />
-                    - Lockers available on 1F (TWD $10 coin return).
+                <div className="p-3.5 rounded-2xl bg-theme-bg border border-theme-border space-y-1.5">
+                  <p className="font-bold text-amber-400">🎟️ Per-Entry Cash Payment (單次入場卡)</p>
+                  <p className="text-theme-muted leading-relaxed">
+                    - Gym Weight Room: TWD $20 / entry (scan Student ID turnstile).<br />
+                    - Aquatic Swimming Pool: TWD $50 / entry (Student ticket).
                   </p>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-theme-bg border border-theme-border space-y-1">
-                  <p className="font-bold text-amber-400">🏸 Indoor Racket Sports (羽球館 & 桌球室)</p>
-                  <p className="text-theme-muted">
-                    - Non-marking indoor court shoes required.<br />
-                    - Free for NTHU students during standard open hours.
+                <div className="p-3.5 rounded-2xl bg-theme-bg border border-theme-border space-y-1.5">
+                  <p className="font-bold text-amber-400">⏰ Break & Maintenance Times (維護與休息時間)</p>
+                  <p className="text-theme-muted leading-relaxed">
+                    - Weight Room Midday Break: 12:00 - 13:00 daily.<br />
+                    - Aquatic Pool Maintenance Break: 12:00 - 13:30 daily.<br />
+                    - PE Classes priority: Weekday 10:00-12:00 and 14:00-16:00.
                   </p>
                 </div>
               </div>

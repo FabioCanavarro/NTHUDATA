@@ -33,12 +33,9 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
       )}
 
-      {/* Brand Title for Mobile Header */}
-      <Link href="/" className="md:hidden flex items-center gap-2 shrink-0">
-        <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-theme-primary to-theme-accent flex items-center justify-center text-white shadow-glow">
-          <Sparkles className="w-4 h-4" />
-        </div>
-        <span className="font-bold text-base text-theme-text tracking-wide">
+      {/* Brand Title for Mobile Header — NO LOGO */}
+      <Link href="/" className="md:hidden flex items-center shrink-0">
+        <span className="font-extrabold text-base text-theme-text tracking-wide">
           NTHU<span className="text-theme-primary">HUB</span>
         </span>
       </Link>

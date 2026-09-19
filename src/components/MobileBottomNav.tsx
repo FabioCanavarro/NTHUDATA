@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   Bike,
-  Bus,
   WashingMachine,
   Search,
   Menu,
+  ExternalLink,
 } from 'lucide-react';
 
 interface MobileBottomNavProps {
@@ -26,15 +26,32 @@ export function MobileBottomNav({
   const NAV_ITEMS = [
     { href: '/', label: 'Home', icon: LayoutDashboard },
     { href: '/youbike', label: 'YouBike', icon: Bike },
-    { href: '/buses', label: 'Buses', icon: Bus },
     { href: '/laundry', label: 'Laundry', icon: WashingMachine },
+    { href: 'https://nthumod.com', label: 'NTHUMOD ↗', icon: ExternalLink, external: true },
   ];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-theme-bg/95 border-t border-theme-border backdrop-blur-xl md:hidden px-2 py-1.5 shadow-2xl flex items-center justify-around">
       {NAV_ITEMS.map((item) => {
-        const isActive = pathname === item.href;
+        const isActive = !item.external && pathname === item.href;
         const Icon = item.icon;
+
+        if (item.external) {
+          return (
+            <a
+              key={item.href}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1"
+            >
+              <div className="flex flex-col items-center justify-center py-1 rounded-xl text-indigo-400 hover:text-indigo-300 font-bold">
+                <Icon className="w-5 h-5 text-indigo-400" />
+                <span className="text-[10px] mt-0.5 tracking-tight">{item.label}</span>
+              </div>
+            </a>
+          );
+        }
 
         return (
           <Link key={item.href} href={item.href} className="flex-1">
