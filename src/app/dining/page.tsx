@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { UtensilsCrossed, Search, MapPin, Building, Clock, Phone, AlertCircle, CheckCircle, Info } from 'lucide-react';
+import { UtensilsCrossed, Search, MapPin, Building, Clock, Phone, AlertCircle, CheckCircle, Info, RefreshCw } from 'lucide-react';
 import { StarButton } from '@/components/StarButton';
 import { getPinyinAndEnglish } from '@/utils/pinyin';
 
@@ -146,24 +146,23 @@ export default function DiningPage() {
   const [selectedBuilding, setSelectedBuilding] = useState<string>('ALL');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'OPEN' | 'SOON' | 'CLOSED'>('ALL');
 
-  useEffect(() => {
-    async function loadDiningData() {
-      try {
-        setLoading(true);
-        const res = await fetch('/api/v1/dining');
-        if (res.ok) {
-          const data = await res.json();
-          setDiningData(data.buildings || []);
-        }
-      } catch (e) {
-        console.error('Failed to load dining data', e);
-      } finally {
-        setLoading(false);
+  const loadDiningData = async (showLoading = true) => {
+    try {
+      if (showLoading) setLoading(true);
+      const res = await fetch('/api/v1/dining');
+      if (res.ok) {
+        const data = await res.json();
+        setDiningData(data.buildings || []);
       }
+    } catch (e) {
+      console.error('Failed to load dining data', e);
+    } finally {
+      if (showLoading) setLoading(false);
     }
-    loadDiningData();
-    const interval = setInterval(loadDiningData, 3000);
-    return () => clearInterval(interval);
+  };
+
+  useEffect(() => {
+    loadDiningData(true);
   }, []);
 
   const buildings = Array.from(new Set(diningData.map((b) => b.building)));
@@ -212,6 +211,15 @@ export default function DiningPage() {
             Real-time open/close status, opening hours, building locations, and English & Pinyin translations.
           </p>
         </div>
+
+        <button
+          onClick={() => loadDiningData(true)}
+          disabled={loading}
+          className="px-4 py-2.5 rounded-2xl bg-theme-card border border-theme-border hover:border-rose-500/50 text-rose-400 flex items-center gap-2 text-xs font-bold transition-all disabled:opacity-50 shrink-0"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+          Refresh Directory
+        </button>
       </div>
 
       {/* Filter Controls */}

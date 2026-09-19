@@ -1,5 +1,6 @@
 /**
- * Universal Pinyin & English dictionary helper for NTHU Campus entities
+ * Universal Pinyin & English dictionary helper for NTHU Campus entities,
+ * Lost & Found auto-translation, and Laundry MQTT status translation.
  */
 
 interface TranslationMapping {
@@ -9,26 +10,26 @@ interface TranslationMapping {
 
 export const DICTIONARY: Record<string, TranslationMapping> = {
   // Dormitories & Laundry Hubs
-  '義齋': { pinyin: 'Yì Zhāi', english: 'Yi Dormitory (Yizhai)' },
-  '新齋': { pinyin: 'Xīn Zhāi', english: 'Xin Dormitory (Xinzhai)' },
+  '義齋': { pinyin: 'Yì Zhāi', english: 'Yi Dormitory' },
+  '新齋': { pinyin: 'Xīn Zhāi', english: 'Xin Dormitory' },
   '新齋(男)': { pinyin: 'Xīn Zhāi (Nán)', english: 'Xin Dorm Male' },
   '新齋(女)': { pinyin: 'Xīn Zhāi (Nǚ)', english: 'Xin Dorm Female' },
   '男一齋': { pinyin: 'Nán Yī Zhāi', english: 'Male Dorm 1' },
-  '文齋': { pinyin: 'Wén Zhāi', english: 'Wen Dormitory (Female)' },
-  '雅齋': { pinyin: 'Yǎ Zhāi', english: 'Ya Dormitory (Female)' },
+  '文齋': { pinyin: 'Wén Zhāi', english: 'Wen Female Dorm' },
+  '雅齋': { pinyin: 'Yǎ Zhāi', english: 'Ya Female Dorm' },
   '平齋': { pinyin: 'Píng Zhāi', english: 'Ping Dormitory' },
   '信齋': { pinyin: 'Xìn Zhāi', english: 'Xin Dormitory B' },
-  '華齋': { pinyin: 'Huá Zhāi', english: 'Hua Dormitory (Huazhai)' },
-  '明齋': { pinyin: 'Míng Zhāi', english: 'Ming Dormitory (Mingzhai)' },
+  '華齋': { pinyin: 'Huá Zhāi', english: 'Hua Dormitory' },
+  '明齋': { pinyin: 'Míng Zhāi', english: 'Ming Dormitory' },
   '清華會館9F': { pinyin: 'Qīng Huá Huì Guǎn 9F', english: 'Tsinghua Hall 9F' },
   '清華會館B1': { pinyin: 'Qīng Huá Huì Guǎn B1', english: 'Tsinghua Association B1' },
-  '禮齋': { pinyin: 'Lǐ Zhāi', english: 'Li Dormitory (Lizhai)' },
+  '禮齋': { pinyin: 'Lǐ Zhāi', english: 'Li Dormitory' },
   '實齋男': { pinyin: 'Shí Zhāi (Nán)', english: 'Shisai Male Dorm' },
   '實齋女': { pinyin: 'Shí Zhāi (Nǚ)', english: 'Shisai Female Dorm' },
-  '靜齋': { pinyin: 'Jìng Zhāi', english: 'Jing Dormitory (Jingzhai)' },
-  '碩齋': { pinyin: 'Shuò Zhāi', english: 'Shuo Graduate Dorm (Shuozhai)' },
-  '惠齋': { pinyin: 'Huì Zhāi', english: 'Hui Dormitory (Huizhai)' },
-  '誠齋': { pinyin: 'Chéng Zhāi', english: 'Cheng Dormitory (Chengzhai)' },
+  '靜齋': { pinyin: 'Jìng Zhāi', english: 'Jing Dormitory' },
+  '碩齋': { pinyin: 'Shuò Zhāi', english: 'Shuo Graduate Dorm' },
+  '惠齋': { pinyin: 'Huì Zhāi', english: 'Hui Dormitory' },
+  '誠齋': { pinyin: 'Chéng Zhāi', english: 'Cheng Dormitory' },
   '仁齋男': { pinyin: 'Rén Zhāi (Nán)', english: 'Ren Male Dorm' },
   '仁齋女': { pinyin: 'Rén Zhāi (Nǚ)', english: 'Ren Female Dorm' },
 
@@ -44,7 +45,7 @@ export const DICTIONARY: Record<string, TranslationMapping> = {
   '赤土崎': { pinyin: 'Chì Tǔ Qí', english: 'Chituqi Park & Underground Parking' },
   '南大校區': { pinyin: 'Nán Dà Xiào Qū', english: 'Nanda Campus' },
   '清大夜市': { pinyin: 'Qīng Dà Yè Shì', english: 'NTHU Night Market' },
-  '奕園': { pinyin: 'Yì Yuán', english: 'Yi Garden (Go Board Monument)' },
+  '奕園': { pinyin: 'Yì Yuán', english: 'Yi Garden' },
   '楓林小徑': { pinyin: 'Fēng Lín Xiǎo Jìng', english: 'Maple Path' },
   '旺宏館': { pinyin: 'Wàng Hóng Guǎn', english: 'Wang Hong Hall (Main Library)' },
   '人社院': { pinyin: 'Rén Shè Yuàn', english: 'Humanities & Social Sciences College' },
@@ -85,14 +86,64 @@ export const DICTIONARY: Record<string, TranslationMapping> = {
   '洗衣機': { pinyin: 'Xǐ Yī Jī', english: 'Washing Machine' },
   '烘衣機': { pinyin: 'Hōng Yī Jī', english: 'Clothes Dryer' },
   '脫水機': { pinyin: 'Tuō Shuǐ Jī', english: 'Spin Dryer' },
+  '空機': { pinyin: 'Kōng Jī', english: 'Available / Empty' },
   '空閒中': { pinyin: 'Kōng Xián Zhōng', english: 'Available / Idle' },
   '使用中': { pinyin: 'Shǐ Yòng Zhōng', english: 'In Use / Running' },
+  '運轉': { pinyin: 'Yùn Zhuǎn', english: 'In Use' },
+  '待取': { pinyin: 'Dài Qǔ', english: 'Ready for Pickup' },
+  '請取衣': { pinyin: 'Qǐng Qǔ Yī', english: 'Please Pick Up Clothes' },
+  '待按啟動': { pinyin: 'Dài Àn Qǐdòng', english: 'Press Start Button' },
   '維修中': { pinyin: 'Wéi Xiū Zhōng', english: 'Under Maintenance' },
+  '故障': { pinyin: 'Gù Zhàng', english: 'Out of Order' },
+  '未連線': { pinyin: 'Wèi Lián Xiàn', english: 'Offline' },
   '營業中': { pinyin: 'Yíng Yè Zhōng', english: 'Open Now' },
   '即將關門': { pinyin: 'Jí Jiāng Guān Mén', english: 'Closing Soon' },
   '即將開門': { pinyin: 'Jí Jiāng Kāi Mén', english: 'Opening Soon' },
   '已關閉': { pinyin: 'Yǐ Guān Bì', english: 'Closed Now' },
 };
+
+// Automatic English phrase translation rules for Lost & Found items
+const TRANSLATION_RULES: [RegExp, string][] = [
+  [/清華大學學生證|學生證/g, 'NTHU Student ID Card'],
+  [/藍芽耳機|藍牙耳機|無線耳機/g, 'Bluetooth Earphones'],
+  [/耳機殼|AirPods 殼|耳機盒/g, 'AirPods / Earphone Charging Case'],
+  [/AirPods/g, 'Apple AirPods'],
+  [/悠遊卡|一卡通|icash|金融卡|信用卡/g, 'EasyCard / Payment Card'],
+  [/鑰匙包|鑰匙圈|鑰匙/g, 'Keys / Keychain'],
+  [/皮夾|錢包|短夾|長夾/g, 'Wallet / Purse'],
+  [/水壺|水杯|保溫瓶|隨行杯/g, 'Water Bottle / Thermos'],
+  [/雨傘|折傘|自動傘/g, 'Umbrella'],
+  [/外套|風衣|帽T|衣服/g, 'Jacket / Clothing'],
+  [/帽子|鴨舌帽|毛帽/g, 'Hat / Cap'],
+  [/筆記本|課本|書籍|講義/g, 'Notebook / Textbook'],
+  [/鉛筆盒|筆袋|文具/g, 'Pencil Case / Stationery'],
+  [/隨身碟|USB|隨身硬碟/g, 'USB Flash Drive'],
+  [/計算機/g, 'Calculator'],
+  [/眼鏡|太陽眼鏡|眼鏡盒/g, 'Glasses / Sunglasses Case'],
+  [/安全帽/g, 'Motorcycle Helmet'],
+  [/後背包|背包|手提袋|帆布袋|包包/g, 'Backpack / Handbag'],
+  [/充電器|充電線|豆腐頭|變壓器/g, 'Charger / Cable'],
+  [/行郵行動電源|行動電源/g, 'Power Bank'],
+  [/手錶|智慧手錶/g, 'Watch / Smartwatch'],
+  [/戒指|項鍊|飾品/g, 'Jewelry / Ring'],
+  [/停車證|車證/g, 'Parking Permit Card'],
+  [/白色/g, 'White'],
+  [/黑色/g, 'Black'],
+  [/藍色/g, 'Blue'],
+  [/紅色/g, 'Red'],
+  [/粉紅色|粉色/g, 'Pink'],
+  [/綠色/g, 'Green'],
+  [/黃色/g, 'Yellow'],
+  [/灰色/g, 'Gray'],
+  [/棕色|咖啡色/g, 'Brown'],
+  [/透明/g, 'Transparent / Clear'],
+  [/無/g, 'None'],
+  [/殼內無耳機/g, '(Case Only - No Earbuds Inside)'],
+  [/總圖/g, 'Main Library'],
+  [/人社分館|人社圖書館/g, 'HSS Library Branch'],
+  [/南大分館/g, 'Nanda Library Branch'],
+  [/服務櫃檯|櫃檯/g, 'Service Desk'],
+];
 
 export function getPinyinAndEnglish(term: string): { original: string; pinyin: string; english: string; fullLabel: string } {
   if (!term) return { original: '', pinyin: '', english: '', fullLabel: '' };
@@ -140,3 +191,74 @@ export function getPinyinAndEnglish(term: string): { original: string; pinyin: s
   };
 }
 
+/**
+ * Automatically translates Chinese description/location into clear English.
+ */
+export function translateChineseText(text: string): string {
+  if (!text) return '';
+  let translated = text;
+
+  // Apply replacement rules
+  for (const [rule, replacement] of TRANSLATION_RULES) {
+    translated = translated.replace(rule, replacement);
+  }
+
+  // Clean up punctuation spacing
+  translated = translated
+    .replace(/\s+/g, ' ')
+    .replace(/\(\s+/g, '(')
+    .replace(/\s+\)/g, ')')
+    .trim();
+
+  return translated;
+}
+
+/**
+ * Helper to translate laundry machine status into English
+ */
+export function translateLaundryStatus(
+  statusBadge: string,
+  statusText: string
+): { englishBadge: string; englishText: string; color: string } {
+  let englishBadge = 'Available';
+  let englishText = 'Available / Empty';
+  let color = 'text-emerald-400';
+
+  if (statusBadge === '空機' || statusText.includes('空機')) {
+    englishBadge = 'Available';
+    englishText = 'Available / Empty';
+    color = 'text-emerald-400';
+  } else if (statusBadge === '待取' || statusText.includes('待取') || statusText.includes('請取衣')) {
+    englishBadge = 'Pickup Ready';
+    englishText = 'Done - Ready for Pickup';
+    color = 'text-cyan-400';
+  } else if (statusBadge === '待按啟動' || statusText.includes('待按啟動')) {
+    englishBadge = 'Press Start';
+    englishText = 'Press Start Button';
+    color = 'text-rose-400';
+  } else if (statusBadge === '運轉' || statusText.includes('運轉') || statusText.includes('分')) {
+    englishBadge = 'In Use';
+    color = 'text-amber-400';
+
+    // Parse remaining minutes/seconds if present
+    const minMatch = statusText.match(/(\d+)\s*分/);
+    const secMatch = statusText.match(/(\d+)\s*秒/);
+    if (minMatch) {
+      const mins = minMatch[1];
+      const secs = secMatch ? secMatch[1] : '00';
+      englishText = `${mins}m ${secs}s remaining`;
+    } else {
+      englishText = 'In Use / Running';
+    }
+  } else if (statusText.includes('故障')) {
+    englishBadge = 'Fault';
+    englishText = 'Out of Order';
+    color = 'text-rose-500';
+  } else if (statusText.includes('維修')) {
+    englishBadge = 'Maintenance';
+    englishText = 'Under Maintenance';
+    color = 'text-amber-500';
+  }
+
+  return { englishBadge, englishText, color };
+}

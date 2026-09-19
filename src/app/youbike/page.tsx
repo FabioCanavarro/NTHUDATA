@@ -6,6 +6,7 @@ import { Bike, RefreshCw, MapPin, Search, Navigation, Map as MapIcon, Grid, Zap 
 import { StarButton } from '@/components/StarButton';
 import { getPinyinAndEnglish } from '@/utils/pinyin';
 import YouBikeMap from '@/components/YouBikeMap';
+import { DataExporter } from '@/components/DataExporter';
 
 // Haversine distance formula in KM
 function getDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -136,7 +137,25 @@ export default function YouBikePage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Data Export Button */}
+          <DataExporter
+            data={processedStations.map((s) => ({
+              station: s.displayName,
+              pinyin: s.pinyin,
+              english: s.english,
+              available_bikes: s.availableBikes,
+              general_bikes: s.generalBikes,
+              electric_bikes: s.electricBikes,
+              empty_docks: s.emptyDocks,
+              address: s.address,
+              lat: s.lat,
+              lng: s.lng,
+            }))}
+            filename="nthu_youbike_stations"
+            title="YouBike Stations"
+          />
+
           {/* View Toggle Button */}
           <div className="flex items-center bg-theme-card p-1 rounded-2xl border border-theme-border">
             <button

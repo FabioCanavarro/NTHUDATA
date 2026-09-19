@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Bike,
@@ -19,7 +19,10 @@ import {
   Sparkles,
   SearchCheck,
   Dumbbell,
+  X,
+  Download,
 } from 'lucide-react';
+import { PwaInstallPrompt } from './PwaInstallPrompt';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home Dashboard', icon: LayoutDashboard },
@@ -37,14 +40,26 @@ const NAV_ITEMS = [
   { href: '/docs', label: 'Developer API', icon: Code, badge: 'v1' },
 ];
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({
+  mobileOpen = false,
+  onCloseMobile,
+}) => {
   const pathname = usePathname();
 
-  return (
-    <aside className="w-64 bg-theme-card/90 border-r border-theme-border flex flex-col h-screen sticky top-0 z-30 backdrop-blur-xl">
+  const handleNavClick = () => {
+    if (onCloseMobile) onCloseMobile();
+  };
+
+  const navContent = (
+    <div className="flex flex-col h-full">
       {/* Brand Header */}
       <div className="p-5 border-b border-theme-border flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/" onClick={handleNavClick} className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-theme-primary to-theme-accent flex items-center justify-center text-white shadow-glow group-hover:scale-105 transition-transform">
             <Sparkles className="w-5 h-5" />
           </div>
@@ -55,6 +70,16 @@ export const Sidebar: React.FC = () => {
             <p className="text-xs text-theme-muted">Unified Campus OS</p>
           </div>
         </Link>
+
+        {/* Mobile Close Button */}
+        {onCloseMobile && (
+          <button
+            onClick={onCloseMobile}
+            className="md:hidden p-2 rounded-xl text-theme-muted hover:text-theme-text hover:bg-theme-bg/80 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Nav Menu */}
@@ -64,7 +89,7 @@ export const Sidebar: React.FC = () => {
           const Icon = item.icon;
 
           return (
-            <Link key={item.href} href={item.href}>
+            <Link key={item.href} href={item.href} onClick={handleNavClick}>
               <div
                 className={`relative px-3.5 py-2.5 rounded-xl flex items-center justify-between font-medium text-sm transition-all duration-200 group ${
                   isActive
@@ -104,11 +129,52 @@ export const Sidebar: React.FC = () => {
         })}
       </nav>
 
-      {/* Footer info */}
-      <div className="p-4 border-t border-theme-border text-xs text-theme-muted flex items-center justify-between bg-theme-bg/40">
-        <span className="font-semibold text-theme-text">NTHU Hub System</span>
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      {/* Footer info + Install PWA Trigger */}
+      <div className="p-4 border-t border-theme-border text-xs text-theme-muted flex flex-col gap-2 bg-theme-bg/40">
+        <div className="flex items-center justify-between">
+          <span className="font-semibold text-theme-text">NTHU Hub System</span>
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        </div>
+        <div className="pt-1">
+          <PwaInstallPrompt variant="button" />
+        </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Sticky Sidebar */}
+      <aside className="hidden md:flex w-64 bg-theme-card/90 border-r border-theme-border flex-col h-screen sticky top-0 z-30 backdrop-blur-xl shrink-0">
+        {navContent}
+      </aside>
+
+      {/* Mobile Drawer Overlay */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <div className="fixed inset-0 z-50 md:hidden flex">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={onCloseMobile}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            />
+
+            {/* Off-canvas Drawer Panel */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="relative w-72 max-w-[85vw] bg-theme-card border-r border-theme-border flex flex-col h-full shadow-2xl z-10 overflow-hidden"
+            >
+              {navContent}
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

@@ -156,7 +156,7 @@ export default function YouBikeMap({
   }, [stations, userLat, userLng, selectedStationUid]);
 
   return (
-    <div className="w-full h-[400px] md:h-[480px] rounded-3xl overflow-hidden border border-theme-border shadow-lg relative bg-theme-card">
+    <div className="w-full h-[320px] sm:h-[420px] md:h-[500px] rounded-3xl overflow-hidden border border-theme-border shadow-lg relative bg-theme-card">
       <div ref={mapContainerRef} className="w-full h-full z-10" />
     </div>
   );

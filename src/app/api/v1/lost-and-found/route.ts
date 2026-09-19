@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getPinyinAndEnglish } from '@/utils/pinyin';
+import { getPinyinAndEnglish, translateChineseText } from '@/utils/pinyin';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -25,6 +25,10 @@ export async function GET(request: Request) {
           const locInfo = getPinyinAndEnglish(location);
           const descInfo = getPinyinAndEnglish(desc);
 
+          // Auto translate into clear English
+          const englishLocation = translateChineseText(location) || locInfo.english;
+          const englishDesc = translateChineseText(desc) || descInfo.english;
+
           // Infer category
           let itemCategory = 'Other';
           if (desc.includes('耳機') || desc.includes('AirPods') || desc.includes('電腦') || desc.includes('手機') || desc.includes('充電')) {
@@ -44,10 +48,10 @@ export async function GET(request: Request) {
             date,
             location,
             pinyinLocation: locInfo.pinyin,
-            englishLocation: locInfo.english,
+            englishLocation: englishLocation,
             description: desc,
             pinyinDesc: descInfo.pinyin,
-            englishDesc: descInfo.english,
+            englishDesc: englishDesc,
             category: itemCategory,
             custody: '清大圖書館一樓服務櫃檯 (Main Lib 1F Service Desk)',
           };
